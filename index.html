@@ -1,18 +1,306 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl" data-theme="light">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <!-- 1. DaisyUI v4 CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="E-Bajr لإدارة تجهيز الطلبات ومتابعتها حتى التسليم." data-i18n-content="page.description" />
+    <title data-i18n="page.title">E-Bajr | إدارة الطلبات</title>
+    <script src="./i18n.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script>
+      // الألوان المستخدمة في الصفحة من tailwind.config.js.
+      if (window.tailwind) {
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                burgundy: {
+                  DEFAULT: "var(--brand-primary)",
+                  50: "#fbf0f3",
+                  300: "#dc8da3",
+                  900: "#33000d",
+                },
+                burgundyGray: {
+                  100: "#f5f2f3",
+                  200: "#d4c5c9",
+                  900: "#261c1e",
+                },
+              },
+            },
+          },
+        };
+      }
+    </script>
+    <style>
+      :root {
+        --brand-primary: #800020;
+        --brand-primary-hover: #66001a;
+      }
 
-    <!-- 2. Tailwind CSS v3 Play CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+      body {
+        font-family: Cairo, Tahoma, Arial, sans-serif;
+      }
+
+      .login-cta.btn {
+        border-color: var(--brand-primary);
+        background-color: var(--brand-primary);
+        color: white;
+        box-shadow: 0 10px 20px -8px rgb(128 0 32 / 45%);
+      }
+
+      .login-cta.btn:hover {
+        border-color: var(--brand-primary-hover);
+        background-color: var(--brand-primary-hover);
+      }
+
+      .order-preview {
+        box-shadow:
+          0 30px 65px -32px rgb(38 28 30 / 62%),
+          0 12px 32px -18px rgb(128 0 32 / 24%);
+      }
+
+      .section-card {
+        box-shadow: 0 18px 34px -25px rgb(38 28 30 / 36%);
+      }
+
+      .footer-logo {
+        filter: brightness(0) invert(1);
+      }
+
+      html:not(.aos-ready) [data-aos] {
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+
+      .aos-ready [data-aos="fade-up"]:not(.aos-animate) {
+        transform: translate3d(0, 18px, 0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html [data-aos] {
+          opacity: 1 !important;
+          transform: none !important;
+          transition: none !important;
+          pointer-events: auto !important;
+        }
+      }
+
+      .order-track {
+        position: relative;
+      }
+
+      .order-track::before {
+        position: absolute;
+        inset-inline: calc(100% / 6);
+        inset-block-start: 5px;
+        height: 1px;
+        background: rgb(255 255 255 / 22%);
+        content: "";
+      }
+
+      .step-dot {
+        position: relative;
+        display: block;
+        width: 11px;
+        height: 11px;
+        margin-inline: auto;
+        margin-block-end: 0.65rem;
+        border: 2px solid #ab8793;
+        border-radius: 50%;
+        background: #34262b;
+      }
+
+      .step-dot-current {
+        border-color: #9edbc0;
+        background: #9edbc0;
+        box-shadow: 0 0 0 3px rgb(158 219 192 / 14%);
+      }
+    </style>
   </head>
-  <body></body>
+  <body class="min-h-screen bg-burgundyGray-100/60 text-burgundyGray-900">
+    <header id="top" class="border-b border-burgundyGray-200/60 bg-white">
+      <div class="mx-auto grid max-w-6xl grid-cols-[1fr_auto] items-center gap-x-3 px-5 pt-3 sm:px-8 md:h-[4.5rem] md:grid-cols-[1fr_auto_1fr] md:gap-x-4 md:pt-0">
+        <a href="#top" aria-label="E-Bajr، الرئيسية" data-i18n-aria-label="nav.home" class="inline-flex justify-self-start rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy">
+          <img src="./public/e-bajr-logo.png" alt="E-Bajr" width="123" height="41" class="h-auto w-[6.5rem] sm:w-[123px]" />
+        </a>
+        <nav aria-label="القائمة الرئيسية" data-i18n-aria-label="nav.main" class="col-span-2 col-start-1 row-start-2 mt-2 flex flex-wrap items-center justify-between gap-x-3 border-t border-burgundyGray-200/50 text-xs font-bold md:col-span-1 md:col-start-2 md:row-start-1 md:mt-0 md:justify-center md:gap-x-5 md:border-t-0 md:text-sm lg:gap-x-8">
+          <a href="#how-it-works" data-i18n="nav.howItWorks" class="py-2.5 transition-colors hover:text-burgundy">كيف يعمل؟</a>
+          <a href="#for-whom" data-i18n="nav.audience" class="py-2.5 transition-colors hover:text-burgundy">للفريق وللعميل</a>
+          <a href="#faq" data-i18n="nav.faq" class="py-2.5 transition-colors hover:text-burgundy">الأسئلة الشائعة</a>
+        </nav>
+        <div class="col-start-2 row-start-1 flex items-center justify-self-end gap-2 whitespace-nowrap text-xs font-bold sm:gap-3 md:col-start-3 lg:gap-4 lg:text-sm">
+          <a href="./login.html" data-keep-language data-i18n="nav.createAccount" class="rounded-sm transition-colors hover:text-burgundy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy">أنشئ حسابي</a>
+          <a href="?lang=en" lang="en" hreflang="en" dir="auto" data-language-toggle class="inline-flex min-h-9 items-center rounded-md border border-burgundyGray-200 bg-white px-2.5 text-burgundy transition-colors hover:bg-burgundy-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-burgundy">English</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="mx-auto grid w-full max-w-6xl items-center gap-7 px-5 pb-16 pt-8 sm:gap-12 sm:px-8 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:py-24" aria-labelledby="hero-title">
+        <div>
+          <p class="mb-4 flex items-center gap-3 text-sm font-bold text-burgundy sm:mb-5">
+            <span class="h-px w-6 bg-burgundy" aria-hidden="true"></span>
+            <span data-i18n="hero.category">نظام متابعة الطلبات</span>
+          </p>
+          <h1 id="hero-title" class="text-[clamp(2.3rem,5.2vw,4.45rem)] font-black leading-[1.23]">
+            <span data-i18n="hero.title">طلبات أوضح،</span>
+            <span data-i18n="hero.accent" class="block text-burgundy">وتسليم أسهل.</span>
+          </h1>
+          <p data-i18n="hero.description" class="mt-5 max-w-[27rem] text-base font-medium leading-[1.9] text-burgundyGray-900/75 sm:mt-6 sm:text-lg">
+            نظّم تجهيز طلبات منشأتك وتسليمها، وأتح لعملائك متابعة حالة طلباتهم من الجوال عبر رمز QR.
+          </p>
+          <a href="./login.html" data-keep-language class="btn btn-primary login-cta mt-6 h-12 min-h-12 gap-3 rounded-md px-6 text-sm font-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy sm:mt-8">
+            <span data-i18n="nav.createAccount">أنشئ حسابي</span>
+            <span data-i18n="hero.arrow" class="text-lg leading-none" aria-hidden="true">←</span>
+          </a>
+        </div>
+
+        <figure class="order-preview rounded-lg border border-burgundyGray-900 bg-burgundyGray-900 p-4 text-white sm:p-7">
+          <figcaption class="mb-5 flex items-center gap-2.5 text-sm font-bold text-white/80">
+            <span class="h-1.5 w-1.5 rounded-full bg-burgundy-300" aria-hidden="true"></span>
+            <span data-i18n="preview.title">معاينة صفحة العميل</span>
+          </figcaption>
+
+          <div class="rounded-md border border-white/10 bg-white/5 p-4 sm:p-6">
+            <div class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 sm:gap-5">
+              <div class="min-w-0">
+                <p data-i18n="preview.orderNumber" class="text-xs font-semibold text-white/70 sm:text-sm">رقم الطلب</p>
+                <p class="mt-1.5 text-4xl font-extrabold leading-none tabular-nums sm:text-5xl"><bdi>007</bdi></p>
+                <p class="badge mt-3 h-auto min-h-7 max-w-full gap-1.5 rounded-sm border-[#9edbc0]/20 bg-[#9edbc0]/10 px-2 py-1 text-[0.68rem] font-bold text-[#b3e6cc] sm:px-2.5 sm:text-xs">
+                  <span aria-hidden="true">✓</span>
+                  <span data-i18n="preview.ready">جاهز للاستلام</span>
+                </p>
+              </div>
+              <div class="text-center">
+                <img src="./public/demo-order-qr.png" alt="رمز QR تجريبي للطلب 007" data-i18n-alt="preview.qrAlt" width="111" height="111" class="h-auto w-20 rounded-sm bg-white min-[375px]:w-24 sm:w-28" />
+                <p data-i18n="preview.demoQr" class="mt-1.5 text-[0.65rem] font-semibold text-white/70 sm:text-xs">رمز تجريبي</p>
+              </div>
+            </div>
+            <ol class="order-track mt-6 grid list-none grid-cols-3 gap-0 text-center text-[0.7rem] font-semibold text-white/75 sm:mt-8 sm:text-xs" aria-label="مراحل الطلب" data-i18n-aria-label="preview.stages" role="list">
+              <li>
+                <span class="step-dot" aria-hidden="true"></span>
+                <span data-i18n="preview.new">جديد</span>
+              </li>
+              <li>
+                <span class="step-dot" aria-hidden="true"></span>
+                <span data-i18n="preview.preparing">قيد التجهيز</span>
+              </li>
+              <li aria-current="step" class="text-[#b3e6cc]">
+                <span class="step-dot step-dot-current" aria-hidden="true"></span>
+                <span data-i18n="preview.ready">جاهز للاستلام</span>
+              </li>
+            </ol>
+          </div>
+        </figure>
+      </section>
+
+      <section id="how-it-works" class="scroll-mt-4 border-y border-burgundyGray-200/60 bg-white" aria-labelledby="steps-title">
+        <div class="mx-auto max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
+          <h2 id="steps-title" data-i18n="steps.title" class="text-center text-3xl font-extrabold sm:text-4xl" data-aos="fade-up">
+            كيف يعمل E-Bajr؟
+          </h2>
+          <ol class="mt-8 grid gap-4 md:grid-cols-3 md:gap-5" role="list">
+            <li class="card section-card items-start rounded-lg border border-burgundyGray-200/65 bg-white p-5 sm:p-6" data-aos="fade-up">
+              <span data-i18n="steps.firstNumber" class="grid h-9 w-9 place-items-center rounded-md bg-burgundy-50 text-sm font-extrabold text-burgundy" aria-hidden="true">١</span>
+              <h3 data-i18n="steps.firstTitle" class="mt-4 text-lg font-extrabold">سجّل الطلب</h3>
+              <p data-i18n="steps.firstDescription" class="mt-2 text-sm leading-7 text-burgundyGray-900/75">أدخل آخر ثلاثة أرقام من الفاتورة لإنشاء الطلب.</p>
+            </li>
+            <li class="card section-card items-start rounded-lg border border-burgundyGray-200/65 bg-white p-5 sm:p-6" data-aos="fade-up" data-aos-delay="50">
+              <span data-i18n="steps.secondNumber" class="grid h-9 w-9 place-items-center rounded-md bg-burgundy-50 text-sm font-extrabold text-burgundy" aria-hidden="true">٢</span>
+              <h3 data-i18n="steps.secondTitle" class="mt-4 text-lg font-extrabold">شارك رمز الطلب</h3>
+              <p data-i18n="steps.secondDescription" class="mt-2 text-sm leading-7 text-burgundyGray-900/75">يمسح العميل رمز QR الخاص بطلبه لمتابعة حالته من الجوال.</p>
+            </li>
+            <li class="card section-card items-start rounded-lg border border-burgundyGray-200/65 bg-white p-5 sm:p-6" data-aos="fade-up" data-aos-delay="100">
+              <span data-i18n="steps.thirdNumber" class="grid h-9 w-9 place-items-center rounded-md bg-burgundy-50 text-sm font-extrabold text-burgundy" aria-hidden="true">٣</span>
+              <h3 data-i18n="steps.thirdTitle" class="mt-4 text-lg font-extrabold">حدّث الحالة وسلّم الطلب</h3>
+              <p data-i18n="steps.thirdDescription" class="mt-2 text-sm leading-7 text-burgundyGray-900/75">غيّر الحالة إلى «جاهز للاستلام»، ثم أكّد التسليم عند الاستلام.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="for-whom" class="mx-auto max-w-6xl scroll-mt-4 px-5 py-14 sm:px-8 sm:py-20" aria-labelledby="for-whom-title">
+        <h2 id="for-whom-title" data-i18n="nav.audience" class="text-center text-3xl font-extrabold sm:text-4xl" data-aos="fade-up">للفريق وللعميل</h2>
+        <div class="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-2 sm:gap-5">
+          <article class="card section-card rounded-lg border border-burgundyGray-200/65 bg-white p-5 sm:p-7" data-aos="fade-up">
+            <span class="mb-4 h-0.5 w-7 rounded bg-burgundy" aria-hidden="true"></span>
+            <h3 data-i18n="audience.team" class="text-lg font-extrabold">فريق المنشأة</h3>
+            <p data-i18n="audience.teamDescription" class="mt-2 text-sm leading-7 text-burgundyGray-900/75">يتابع الطلبات النشطة من مكان واحد، ويبحث برقم الطلب لتحديث حالته بسرعة.</p>
+          </article>
+          <article class="card section-card rounded-lg border border-burgundyGray-200/65 bg-white p-5 sm:p-7" data-aos="fade-up" data-aos-delay="50">
+            <span class="mb-4 h-0.5 w-7 rounded bg-burgundy" aria-hidden="true"></span>
+            <h3 data-i18n="audience.customer" class="text-lg font-extrabold">العميل</h3>
+            <p data-i18n="audience.customerDescription" class="mt-2 text-sm leading-7 text-burgundyGray-900/75">يعرف متى يجهز طلبه من المتصفح على جواله، بدون تسجيل دخول.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="faq" class="scroll-mt-4 bg-burgundyGray-900 text-white" aria-labelledby="faq-title">
+        <div class="mx-auto max-w-4xl px-5 py-14 sm:px-8 sm:py-20">
+          <h2 id="faq-title" data-i18n="nav.faq" class="text-center text-3xl font-extrabold sm:text-4xl" data-aos="fade-up">الأسئلة الشائعة</h2>
+          <div class="mt-8 grid gap-3">
+            <details class="collapse collapse-arrow rounded-lg border border-white/15 bg-white/5">
+              <summary data-i18n="faq.posQuestion" class="collapse-title text-sm font-bold sm:text-base">هل أحتاج إلى ربط النظام بالكاشير؟</summary>
+              <div class="collapse-content text-sm leading-7 text-white/80">
+                <p data-i18n="faq.posAnswer">لا، يكفي أن يدخل فريق المنشأة آخر ثلاثة أرقام من الفاتورة عند إنشاء الطلب.</p>
+              </div>
+            </details>
+            <details class="collapse collapse-arrow rounded-lg border border-white/15 bg-white/5">
+              <summary data-i18n="faq.appQuestion" class="collapse-title text-sm font-bold sm:text-base">هل يحتاج العميل إلى تثبيت تطبيق؟</summary>
+              <div class="collapse-content text-sm leading-7 text-white/80">
+                <p data-i18n="faq.appAnswer">يمسح العميل رمز QR بالكاميرا، وتفتح صفحة الطلب في المتصفح.</p>
+              </div>
+            </details>
+            <details class="collapse collapse-arrow rounded-lg border border-white/15 bg-white/5">
+              <summary data-i18n="faq.handoffQuestion" class="collapse-title text-sm font-bold sm:text-base">ماذا يحدث بعد تأكيد التسليم؟</summary>
+              <div class="collapse-content text-sm leading-7 text-white/80">
+                <p data-i18n="faq.handoffAnswer">تتغير حالة الطلب إلى «تم التسليم»، ويخرج من قائمة الطلبات النشطة.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-white/10 bg-burgundy-900 text-white">
+      <div class="mx-auto max-w-6xl px-5 sm:px-8">
+        <div class="flex flex-wrap items-center justify-between gap-x-10 gap-y-6 py-8">
+          <div>
+            <a href="#top" aria-label="E-Bajr، الرئيسية" data-i18n-aria-label="nav.home" class="inline-flex rounded-sm">
+              <img src="./public/e-bajr-logo.png" alt="E-Bajr" width="117" height="39" class="footer-logo" />
+            </a>
+            <p data-i18n="footer.tagline" class="mt-2 text-sm text-white/75">متابعة الطلبات من التجهيز إلى التسليم.</p>
+          </div>
+          <nav aria-label="روابط التذييل" data-i18n-aria-label="footer.links" class="flex flex-wrap gap-x-5 gap-y-3 text-sm font-bold text-white/85">
+            <a href="#how-it-works" data-i18n="nav.howItWorks" class="hover:text-white hover:underline">كيف يعمل؟</a>
+            <a href="#faq" data-i18n="nav.faq" class="hover:text-white hover:underline">الأسئلة الشائعة</a>
+            <a href="./login.html" data-keep-language data-i18n="nav.createAccount" class="hover:text-white hover:underline">أنشئ حسابي</a>
+          </nav>
+        </div>
+        <div class="flex items-center justify-between gap-4 border-t border-white/15 py-4 text-xs font-semibold text-white/70">
+          <p data-i18n="footer.demo">نموذج تجريبي</p>
+          <a href="#top" class="hover:text-white hover:underline"><span data-i18n="footer.backToTop">العودة للأعلى</span> <span aria-hidden="true">↑</span></a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      if (window.AOS && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        AOS.init({
+          once: true,
+          duration: 550,
+          offset: 18,
+          easing: "ease-out-cubic",
+        });
+        document.documentElement.classList.add("aos-ready");
+      }
+    </script>
+  </body>
 </html>
