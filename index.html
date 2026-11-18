@@ -5,37 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="E-Bajr لإدارة تجهيز الطلبات ومتابعتها حتى التسليم." data-i18n-content="page.description" />
     <title data-i18n="page.title">E-Bajr | إدارة الطلبات</title>
-    <script src="./i18n.js"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
-    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-    <script>
-      // الألوان المستخدمة في الصفحة من tailwind.config.js.
-      if (window.tailwind) {
-        tailwind.config = {
-          theme: {
-            extend: {
-              colors: {
-                burgundy: {
-                  DEFAULT: "var(--brand-primary)",
-                  50: "#fbf0f3",
-                  300: "#dc8da3",
-                  900: "#33000d",
-                },
-                burgundyGray: {
-                  100: "#f5f2f3",
-                  200: "#d4c5c9",
-                  900: "#261c1e",
-                },
-              },
-            },
-          },
-        };
-      }
-    </script>
+    
+    <script defer type="module" src="./i18n.js"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>    
+
+    <link rel="stylesheet" href="/style.css">
+
+    <script src="script.js"></script>
+
     <style>
       :root {
         --brand-primary: #800020;
@@ -127,7 +109,7 @@
     <header id="top" class="border-b border-burgundyGray-200/60 bg-white">
       <div class="mx-auto grid max-w-6xl grid-cols-[1fr_auto] items-center gap-x-3 px-5 pt-3 sm:px-8 md:h-[4.5rem] md:grid-cols-[1fr_auto_1fr] md:gap-x-4 md:pt-0">
         <a href="#top" aria-label="E-Bajr، الرئيسية" data-i18n-aria-label="nav.home" class="inline-flex justify-self-start rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy">
-          <img src="./public/e-bajr-logo.png" alt="E-Bajr" width="123" height="41" class="h-auto w-[6.5rem] sm:w-[123px]" />
+          <img src="./e-bajr-logo.png" alt="E-Bajr" width="123" height="41" class="h-auto w-[6.5rem] sm:w-[123px]" />
         </a>
         <nav aria-label="القائمة الرئيسية" data-i18n-aria-label="nav.main" class="col-span-2 col-start-1 row-start-2 mt-2 flex flex-wrap items-center justify-between gap-x-3 border-t border-burgundyGray-200/50 text-xs font-bold md:col-span-1 md:col-start-2 md:row-start-1 md:mt-0 md:justify-center md:gap-x-5 md:border-t-0 md:text-sm lg:gap-x-8">
           <a href="#how-it-works" data-i18n="nav.howItWorks" class="py-2.5 transition-colors hover:text-burgundy">كيف يعمل؟</a>
@@ -135,7 +117,7 @@
           <a href="#faq" data-i18n="nav.faq" class="py-2.5 transition-colors hover:text-burgundy">الأسئلة الشائعة</a>
         </nav>
         <div class="col-start-2 row-start-1 flex items-center justify-self-end gap-2 whitespace-nowrap text-xs font-bold sm:gap-3 md:col-start-3 lg:gap-4 lg:text-sm">
-          <a href="./login.html" data-keep-language data-i18n="nav.createAccount" class="rounded-sm transition-colors hover:text-burgundy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy">أنشئ حسابي</a>
+          <a href="./main.html" data-keep-language data-i18n="nav.createAccount" class="rounded-sm transition-colors hover:text-burgundy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-burgundy">أنشئ حسابي</a>
           <a href="?lang=en" lang="en" hreflang="en" dir="auto" data-language-toggle class="inline-flex min-h-9 items-center rounded-md border border-burgundyGray-200 bg-white px-2.5 text-burgundy transition-colors hover:bg-burgundy-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-burgundy">English</a>
         </div>
       </div>
@@ -178,7 +160,7 @@
                 </p>
               </div>
               <div class="text-center">
-                <img src="./public/demo-order-qr.png" alt="رمز QR تجريبي للطلب 007" data-i18n-alt="preview.qrAlt" width="111" height="111" class="h-auto w-20 rounded-sm bg-white min-[375px]:w-24 sm:w-28" />
+                <img src="./demo-order-qr.png" alt="رمز QR تجريبي للطلب 007" data-i18n-alt="preview.qrAlt" width="111" height="111" class="h-auto w-20 rounded-sm bg-white min-[375px]:w-24 sm:w-28" />
                 <p data-i18n="preview.demoQr" class="mt-1.5 text-[0.65rem] font-semibold text-white/70 sm:text-xs">رمز تجريبي</p>
               </div>
             </div>

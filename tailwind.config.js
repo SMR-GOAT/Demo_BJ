@@ -26,6 +26,10 @@ module.exports = {
           900: "#261C1E", // نصوص داكنة بديلة للأسود
         },
       },
+
+      fontFamily: {
+        sans: ['Cairo', 'sans-serif'],
+      },
     },
   },
   plugins: [require("daisyui")],
