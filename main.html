@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Bajr | تجربة الملفات المشتركة</title>
+
+    <!-- الخط وملفات CSS المشتركة -->
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- تحميل Tailwind ثم إعداد الألوان المشتركة -->
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="./script.js"></script>
+  </head>
+
+  <body class="min-h-screen bg-burgundyGray-100 text-burgundyGray-900">
+    <main class="grid min-h-screen place-items-center p-5">
+      <section
+        class="card w-full max-w-md rounded-lg border border-burgundyGray-200 bg-white shadow-md"
+      >
+        <div class="card-body gap-5 p-7">
+          <h1 class="text-2xl font-bold">متابعة الطلب</h1>
+
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm text-burgundyGray-900/70">رقم الطلب</p>
+              <p class="mt-2 text-4xl font-extrabold text-burgundy">
+                <bdi>007</bdi>
+              </p>
+            </div>
+
+            <span
+              class="badge h-auto rounded border-burgundyGray-200 bg-burgundy-50 px-3 py-2 text-burgundy"
+            >
+              قيد التجهيز
+            </span>
+          </div>
+
+          <p class="text-sm leading-7">
+            فريقنا يجهّز طلبك الآن. يمكنك متابعة حالته من هذه الصفحة.
+          </p>
+
+          <a
+            href="./index.html"
+            class="btn rounded-md border-burgundy bg-burgundy text-white hover:border-burgundy-900 hover:bg-burgundy-900"
+          >
+            العودة للرئيسية
+          </a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
