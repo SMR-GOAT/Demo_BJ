@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | متابعة الطلب</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body data-page="customer">
+    <main class="customer-screen">
+      <article class="customer-card" id="customer-card" hidden>
+        <div class="org-row">
+          <img id="org-logo" alt="" hidden />
+          <h1 id="org-name" style="font-size: 1.35rem"></h1>
+        </div>
+        <p class="muted">رقم الطلب</p>
+        <p class="number"><bdi id="order-number" dir="ltr"></bdi></p>
+        <p><span id="order-status" class="badge"></span></p>
+        <p id="status-copy" aria-live="polite"></p>
+        <p class="muted">وقت التسجيل: <span id="order-time"></span></p>
+        <div id="notify-wrap">
+          <button class="btn btn-block" id="notify-btn" type="button">تفعيل تنبيه الجاهزية</button>
+          <p id="notify-note" class="hint" style="margin-top: 0.55rem" hidden></p>
+        </div>
+      </article>
+      <article class="customer-card" id="invalid-card" hidden>
+        <h1 style="font-size: 1.6rem">تعذر فتح الطلب</h1>
+        <p>هذا الرمز غير صالح.</p>
+      </article>
+    </main>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

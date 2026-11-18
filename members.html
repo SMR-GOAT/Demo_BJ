@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | الأعضاء</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+    <script>
+      try {
+        var data = JSON.parse(localStorage.getItem("ebajr-demo") || "null");
+        if (!data || !data.session || data.session.role !== "admin" || !data.session.loggedIn) {
+          document.documentElement.classList.add("hide-admin");
+        }
+      } catch (error) {
+        document.documentElement.classList.add("hide-admin");
+      }
+    </script>
+  </head>
+  <body data-page="members">
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <a class="brand" href="./dashboard.html"><img class="logo" src="./e-bajr-logo.png" alt="E-Bajr" width="120" height="40" /></a>
+        <nav class="main-nav" aria-label="القائمة">
+          <a href="./dashboard.html">لوحة المتابعة</a>
+          <a href="./orders.html">الطلبات</a>
+          <a href="./create-order.html">طلب جديد</a>
+          <a class="admin-link" href="./members.html">الأعضاء</a>
+        </nav>
+        <div class="session">
+          <p class="session-meta"><span data-org></span><strong data-who></strong></p>
+          <button class="btn btn-quiet btn-sm" type="button" data-logout>خروج</button>
+        </div>
+      </div>
+    </header>
+    <main class="page">
+      <div class="wrap">
+        <section id="denied" hidden>
+          <h1>الأعضاء</h1>
+          <p class="alert alert-error">إدارة الأعضاء متاحة لمدير المنشأة فقط.</p>
+        </section>
+        <section id="admin-panel">
+          <div class="title-row">
+            <div>
+              <h1>الأعضاء</h1>
+              <p class="muted">دعوة مستخدم، تغيير دوره، أو إيقاف وصوله. سجل إجراءاته يبقى محفوظًا.</p>
+            </div>
+          </div>
+          <p id="form-alert" class="alert" role="status" hidden></p>
+          <div class="members-layout">
+            <form id="invite-form" class="card" novalidate>
+              <h2>دعوة عضو</h2>
+              <label class="field">
+                <span>البريد الإلكتروني</span>
+                <input name="email" type="email" inputmode="email" autocomplete="email" aria-describedby="invite-error" required />
+                <p id="invite-error" class="field-error" hidden></p>
+              </label>
+              <label class="field">
+                <span>الدور</span>
+                <select name="role">
+                  <option value="staff">موظف</option>
+                  <option value="admin">مدير</option>
+                </select>
+              </label>
+              <button class="btn" type="submit">إرسال الدعوة</button>
+              <p style="margin-top: 0.8rem"><a id="invite-link" href="./accept-invitation.html" hidden>فتح صفحة قبول الدعوة</a></p>
+            </form>
+            <div class="table-wrap card">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>الاسم</th>
+                    <th>البريد</th>
+                    <th>الحالة</th>
+                    <th>الدور</th>
+                  </tr>
+                </thead>
+                <tbody id="members-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <dialog id="confirm-dialog">
+      <form method="dialog">
+        <h2>تأكيد</h2>
+        <p data-confirm-text></p>
+        <div class="row-actions">
+          <button class="btn btn-quiet" value="cancel">تراجع</button>
+          <button class="btn" value="ok">تأكيد</button>
+        </div>
+      </form>
+    </dialog>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

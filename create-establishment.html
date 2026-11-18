@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | إنشاء المنشأة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body data-page="establishment">
+    <main class="auth-wrap">
+      <section class="auth-card" aria-labelledby="org-title">
+        <a href="./index.html"><img class="logo" src="./e-bajr-logo.png" alt="E-Bajr" width="120" height="40" /></a>
+        <h1 id="org-title">إنشاء المنشأة</h1>
+        <p class="muted">يُربط حسابك بهذه المنشأة ويصبح دورك مديرًا. الاسم يظهر للعميل في صفحة الطلب.</p>
+        <p id="form-alert" class="alert" role="status" hidden></p>
+        <form id="org-form" novalidate>
+          <label class="field">
+            <span>اسم المنشأة</span>
+            <input name="name" type="text" autocomplete="organization" aria-describedby="name-error" required />
+            <p id="name-error" class="field-error" hidden></p>
+          </label>
+          <label class="field">
+            <span>الشعار</span>
+            <input name="logo" type="file" accept="image/*" aria-describedby="logo-error" />
+            <small class="hint">اختياري. يظهر في صفحة العميل إن وُجد.</small>
+            <p id="logo-error" class="field-error" hidden></p>
+          </label>
+          <img id="logo-preview" class="logo-preview" alt="معاينة الشعار" hidden />
+          <button class="btn btn-block" type="submit">إنشاء المنشأة</button>
+        </form>
+        <div class="form-links">
+          <button class="btn btn-quiet btn-sm" type="button" data-logout>خروج</button>
+        </div>
+      </section>
+    </main>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

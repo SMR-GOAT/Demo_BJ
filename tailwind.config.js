@@ -2,33 +2,52 @@
 module.exports = {
   content: ["./*.html"],
   theme: {
+    borderRadius: {
+      none: "0px",
+      sm: "4px",
+      DEFAULT: "6px",
+      md: "6px",
+      lg: "6px",
+      xl: "6px",
+      "2xl": "6px",
+      "3xl": "6px",
+      full: "6px",
+    },
+    boxShadow: {
+      sm: "none",
+      DEFAULT: "none",
+      md: "none",
+      lg: "none",
+      xl: "none",
+      "2xl": "none",
+      inner: "none",
+      none: "none",
+    },
     extend: {
       colors: {
-        // تدرجات العنابي الكاملة (استخدام: bg-burgundy-500 أو text-burgundy)
         burgundy: {
-          50: "#FBF0F3",
-          100: "#F5DBE2",
-          200: "#EABAC7",
-          300: "#DC8DA3",
-          400: "#C7597A",
-          500: "#991336",
-          DEFAULT: "#800020", // الدرجة الأساسية: bg-burgundy
-          700: "#66001A",
-          800: "#4D0013",
-          900: "#33000D",
-          950: "#1A0006",
+          50: "#f3eeeb",
+          100: "#e7ded9",
+          200: "#d3c4be",
+          300: "#a08b86",
+          400: "#8d6e73",
+          500: "#7a5560",
+          DEFAULT: "#6d3d45",
+          700: "#5a3239",
+          800: "#4a2b31",
+          900: "#3d2a2e",
+          950: "#24181a",
         },
-        // درجات الرمادي المشتقة من نفس زاوية اللون (Saturation Tones)
         burgundyGray: {
-          100: "#F5F2F3", // خلفيات هادئة
-          200: "#D4C5C9", // حدود وفواصل
-          500: "#8C737A", // نصوص فرعية خافتة
-          900: "#261C1E", // نصوص داكنة بديلة للأسود
+          100: "#f4f1ec",
+          200: "#ddd6cf",
+          500: "#8a817a",
+          900: "#2c2826",
         },
       },
-
       fontFamily: {
-        sans: ['Cairo', 'sans-serif'],
+        sans: ["Noto Sans Arabic", "Tahoma", "Arial", "sans-serif"],
+        serif: ["Noto Sans Arabic", "Tahoma", "Arial", "sans-serif"],
       },
     },
   },
@@ -37,18 +56,20 @@ module.exports = {
     themes: [
       {
         burgundyTheme: {
-          primary: "#800020", // العنابي الملكي كزر وعنصر أساسي
-          "primary-content": "#ffffff", // لون النص فوق الزر الأساسي
-          secondary: "#C7597A", // تدرج فرعي (Burgundy 400)
-          accent: "#DC8DA3", // تدرج مميز (Burgundy 300)
-          neutral: "#261C1E", // خلفيات داكنة أو نصوص (Burgundy Gray 900)
-          "base-100": "#ffffff", // خلفية الصفحة الرئيسية
-          "base-200": "#FBF0F3", // خلفية الحاويات والبطاقات (Burgundy 50)
-          "base-content": "#261C1E", // لون النصوص الافتراضية
+          primary: "#6d3d45",
+          "primary-content": "#f7f4f0",
+          secondary: "#8a817a",
+          accent: "#a08b86",
+          neutral: "#2c2826",
+          "base-100": "#fffcf9",
+          "base-200": "#f4f1ec",
+          "base-content": "#2c2826",
+          "--rounded-box": "6px",
+          "--rounded-btn": "6px",
+          "--rounded-badge": "6px",
         },
       },
       "light",
-      "dark",
     ],
   },
 };

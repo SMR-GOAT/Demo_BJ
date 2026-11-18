@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | طلب جديد</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+    <script>
+      try {
+        var data = JSON.parse(localStorage.getItem("ebajr-demo") || "null");
+        if (!data || !data.session || data.session.role !== "admin" || !data.session.loggedIn) {
+          document.documentElement.classList.add("hide-admin");
+        }
+      } catch (error) {
+        document.documentElement.classList.add("hide-admin");
+      }
+    </script>
+  </head>
+  <body data-page="create-order">
+    <header class="topbar">
+      <div class="wrap topbar-inner">
+        <a class="brand" href="./dashboard.html"><img class="logo" src="./e-bajr-logo.png" alt="E-Bajr" width="120" height="40" /></a>
+        <nav class="main-nav" aria-label="القائمة">
+          <a href="./dashboard.html">لوحة المتابعة</a>
+          <a href="./orders.html">الطلبات</a>
+          <a href="./create-order.html">طلب جديد</a>
+          <a class="admin-link" href="./members.html">الأعضاء</a>
+        </nav>
+        <div class="session">
+          <p class="session-meta"><span data-org></span><strong data-who></strong></p>
+          <button class="btn btn-quiet btn-sm" type="button" data-logout>خروج</button>
+        </div>
+      </div>
+    </header>
+    <main class="page">
+      <div class="wrap" style="display: grid; gap: 1rem; width: min(640px, calc(100% - 2rem))">
+        <section class="card">
+          <h1>طلب جديد</h1>
+          <p class="muted">أدخل آخر ثلاثة أرقام من الفاتورة. تُحفظ الأصفار في البداية، مثل 007.</p>
+          <p id="form-alert" class="alert" role="status" hidden></p>
+          <form id="create-form" novalidate>
+            <label class="field">
+              <span>رقم الطلب</span>
+              <input class="pin-input" name="number" type="text" inputmode="numeric" maxlength="3" dir="ltr" autocomplete="off" autofocus aria-describedby="number-error" required />
+              <p id="number-error" class="field-error" hidden></p>
+            </label>
+            <button class="btn" type="submit">إنشاء الطلب</button>
+          </form>
+        </section>
+        <section class="card" id="result" hidden aria-live="polite">
+          <h2>رمز الطلب</h2>
+          <p class="muted">الحالة الآن: جديد. امسح العميل هذا الرمز لمتابعة طلبه.</p>
+          <p class="preview-number"><bdi id="result-number" dir="ltr"></bdi></p>
+          <img src="./demo-order-qr.png" alt="رمز QR للطلب" width="140" height="140" />
+          <div class="row-actions" style="margin-top: 0.8rem">
+            <a class="btn btn-quiet" id="result-link" href="./order.html">فتح صفحة العميل</a>
+            <a class="btn btn-quiet" href="./orders.html">قائمة الطلبات</a>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
