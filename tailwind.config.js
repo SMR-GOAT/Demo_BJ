@@ -26,17 +26,17 @@ module.exports = {
     extend: {
       colors: {
         burgundy: {
-          50: "#f3eeeb",
-          100: "#e7ded9",
-          200: "#d3c4be",
-          300: "#a08b86",
-          400: "#8d6e73",
-          500: "#7a5560",
-          DEFAULT: "#6d3d45",
-          700: "#5a3239",
-          800: "#4a2b31",
-          900: "#3d2a2e",
-          950: "#24181a",
+          50: "#fbf0f3",
+          100: "#f5dbe2",
+          200: "#eabac7",
+          300: "#dc8da3",
+          400: "#c7597a",
+          500: "#991336",
+          DEFAULT: "#800020",
+          700: "#66001a",
+          800: "#4d0013",
+          900: "#33000d",
+          950: "#1a0006",
         },
         burgundyGray: {
           100: "#f4f1ec",
@@ -56,7 +56,7 @@ module.exports = {
     themes: [
       {
         burgundyTheme: {
-          primary: "#6d3d45",
+          primary: "#800020",
           "primary-content": "#f7f4f0",
           secondary: "#8a817a",
           accent: "#a08b86",
