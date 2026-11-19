@@ -25,11 +25,11 @@ if (window.tailwind) {
       extend: {
         colors: {
           burgundy: {
-            DEFAULT: "#6d3d45",
-            50: "#f3eeeb",
-            300: "#a08b86",
-            700: "#5a3239",
-            900: "#3d2a2e",
+            DEFAULT: "#800020",
+            50: "#fbf0f3",
+            300: "#dc8da3",
+            700: "#66001a",
+            900: "#33000d",
           },
           burgundyGray: {
             100: "#f4f1ec",
@@ -48,13 +48,11 @@ if (window.tailwind) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const nodes = document.querySelectorAll(".reveal");
+  const nodes = document.querySelectorAll(".reveal, .notification-bell");
   if (nodes.length === 0) return;
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion || !("IntersectionObserver" in window)) return;
-
-  document.documentElement.classList.add("motion");
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -64,8 +62,9 @@ document.addEventListener("DOMContentLoaded", () => {
         observer.unobserve(entry.target);
       }
     },
-    { rootMargin: "0px 0px -8% 0px", threshold: 0.16 }
+    { rootMargin: "0px 0px -24px 0px", threshold: 0.08 }
   );
 
+  document.documentElement.classList.add("motion");
   for (const node of nodes) observer.observe(node);
 });
