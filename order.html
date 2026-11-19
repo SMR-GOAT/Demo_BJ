@@ -3,34 +3,91 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>E-Bajr | متابعة الطلب</title>
+    <meta name="theme-color" content="#f7f5f6" />
+    <title>E-Bajr | متابعة طلبك</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
   </head>
-  <body data-page="customer">
+  <body data-page="customer" class="customer-view">
     <main class="customer-screen">
-      <article class="customer-card" id="customer-card" hidden>
-        <div class="org-row">
-          <img id="org-logo" alt="" hidden />
-          <h1 id="org-name" style="font-size: 1.35rem"></h1>
-        </div>
-        <p class="muted">رقم الطلب</p>
-        <p class="number"><bdi id="order-number" dir="ltr"></bdi></p>
-        <p><span id="order-status" class="badge"></span></p>
-        <p id="status-copy" aria-live="polite"></p>
-        <p class="muted">وقت التسجيل: <span id="order-time"></span></p>
-        <div id="notify-wrap">
-          <button class="btn btn-block" id="notify-btn" type="button">تفعيل تنبيه الجاهزية</button>
-          <p id="notify-note" class="hint" style="margin-top: 0.55rem" hidden></p>
-        </div>
-      </article>
-      <article class="customer-card" id="invalid-card" hidden>
-        <h1 style="font-size: 1.6rem">تعذر فتح الطلب</h1>
-        <p>هذا الرمز غير صالح.</p>
-      </article>
+      <div class="customer-shell">
+        <article id="customer-card" class="customer-ticket" hidden>
+          <header class="customer-org">
+            <span id="org-monogram" class="org-monogram" aria-hidden="true">ب</span>
+            <img id="org-logo" alt="شعار المنشأة" hidden />
+            <div><p>أهلًا بك في</p><h1 id="org-name"></h1></div>
+            <span id="order-status" class="badge"></span>
+          </header>
+          <section class="customer-stage" aria-labelledby="customer-heading">
+            <div class="pager-device" aria-hidden="true">
+              <div class="pager-top"><span class="pager-led"></span><span>E-BAJR</span><span class="pager-led"></span></div>
+              <div class="pager-display">
+                <span class="pager-order-label">طلبك</span>
+                <bdi id="pager-number" dir="ltr"></bdi>
+                <span id="pager-state"></span>
+              </div>
+              <div class="pager-lights"><span></span><span></span><span></span></div>
+            </div>
+            <div class="customer-message" aria-live="polite" aria-atomic="true">
+              <h2 id="customer-heading"></h2>
+              <p id="status-copy"></p>
+            </div>
+          </section>
+          <div class="customer-ticket-details">
+            <div class="customer-number-row">
+              <div><p>رقم طلبك</p><bdi id="order-number" dir="ltr"></bdi></div>
+              <div class="customer-time"><span>تم التسجيل</span><time id="order-time"></time></div>
+            </div>
+            <ol class="customer-progress" id="customer-progress" aria-label="مراحل الطلب">
+              <li data-order-step="new"><span class="progress-point" aria-hidden="true"></span><span>جديد</span></li>
+              <li data-order-step="preparing"><span class="progress-point" aria-hidden="true"></span><span>قيد التجهيز</span></li>
+              <li data-order-step="ready"><span class="progress-point" aria-hidden="true"></span><span>جاهز</span></li>
+              <li data-order-step="delivered"><span class="progress-point" aria-hidden="true"></span><span>تم التسليم</span></li>
+            </ol>
+          </div>
+          <section class="customer-notify" id="notify-wrap" aria-label="تنبيه الجاهزية">
+            <div class="customer-notify-heading">
+              <span class="customer-bell" aria-hidden="true"><span class="notification-bell"><span class="bell-dome"></span><span class="bell-clapper"></span></span></span>
+              <div><h3>خذ راحتك، وخلّ التنبيه علينا</h3><p>فعّل التنبيه لتجربة إشعار جاهزية طلبك.</p></div>
+            </div>
+            <button class="btn btn-block" id="notify-btn" type="button">تفعيل تنبيه الجاهزية</button>
+            <p id="notify-note" class="hint" role="status" hidden></p>
+          </section>
+          <p class="customer-ready-alert" id="customer-ready-alert" role="status" hidden>طلبك جاهز الآن، تفضّل إلى الكاونتر لاستلامه.</p>
+        </article>
+
+        <article class="customer-invalid" id="invalid-card" hidden>
+          <span class="invalid-symbol" aria-hidden="true">!</span>
+          <h1>تعذر فتح الطلب</h1>
+          <p>رمز الطلب غير صالح. اطلب من فريق المنشأة رمز طلبك الصحيح.</p>
+        </article>
+
+        <details class="customer-demo" id="customer-demo" hidden>
+          <summary>عرض تجريبي · جرّب حالات الطلب</summary>
+          <div class="customer-demo-states" role="group" aria-label="حالة الطلب التجريبية">
+            <button type="button" data-demo-status="new">جديد</button>
+            <button type="button" data-demo-status="preparing">قيد التجهيز</button>
+            <button type="button" data-demo-status="ready">جاهز</button>
+            <button type="button" data-demo-status="delivered">تم التسليم</button>
+            <button type="button" data-demo-status="cancelled">ملغي</button>
+          </div>
+        </details>
+        <footer class="customer-powered"><span>بيجر عميلك في جواله</span><a href="./index.html" aria-label="E-Bajr، الرئيسية"><img src="./e-bajr-logo.png" alt="E-Bajr" width="84" height="28" /></a></footer>
+      </div>
     </main>
+
+    <dialog class="notify-dialog" id="notify-dialog" aria-labelledby="notify-dialog-title" aria-describedby="notify-dialog-description">
+      <form method="dialog">
+        <button class="notify-dialog-close" value="cancel" aria-label="إغلاق" type="submit">×</button>
+        <span class="customer-bell" aria-hidden="true"><span class="notification-bell"><span class="bell-dome"></span><span class="bell-clapper"></span></span></span>
+        <h2 id="notify-dialog-title">بننبّهك أول ما يجهز</h2>
+        <p id="notify-dialog-description">فعّل التنبيه، وتابع حالة طلبك من هذه الصفحة وأنت مرتاح.</p>
+        <p class="notify-demo-note">هذا تنبيه تجريبي داخل الصفحة لعرض الفكرة.</p>
+        <button class="btn btn-block" type="submit" value="enable">تفعيل التنبيه التجريبي</button>
+      </form>
+    </dialog>
     <script src="./app.js" defer></script>
   </body>
 </html>

@@ -615,9 +615,10 @@ function initForgot() {
     form.email.setAttribute("aria-invalid", error ? "true" : "false");
     if (error) {
       alert.hidden = true;
+      document.querySelector("#reset-link").hidden = true;
       return;
     }
-    showAlert(alert, "إذا كان البريد مرتبطًا بحساب، فستصله رسالة لتعيين كلمة المرور.", "ok");
+    showAlert(alert, "تمت محاكاة إرسال رابط الاستعادة. يمكنك متابعة الخطوة التالية أدناه.", "ok");
     document.querySelector("#reset-link").hidden = false;
   });
 }
@@ -638,7 +639,7 @@ function initReset() {
     form.confirm.setAttribute("aria-invalid", confirmError ? "true" : "false");
     if (!password || confirmError) return;
     form.hidden = true;
-    showAlert(alert, "تم تعيين كلمة المرور. يمكنك تسجيل الدخول الآن.", "ok");
+    showAlert(alert, "تم تعيين كلمة المرور تجريبيًا. يمكنك الانتقال إلى تسجيل الدخول.", "ok");
     document.querySelector("#login-link").hidden = false;
   });
 }
@@ -1122,27 +1123,37 @@ function initCustomer() {
   const invalid = document.querySelector("#invalid-card");
   const button = document.querySelector("#notify-btn");
   const note = document.querySelector("#notify-note");
+  const dialog = document.querySelector("#notify-dialog");
+  const statuses = ["new", "preparing", "ready", "delivered", "cancelled"];
+  const enabledAlerts = new Set();
   const demoCreatedAt = new Date().toISOString();
+  let demoStatus = statuses.includes(params.get("status")) ? params.get("status") : "preparing";
   let signature = "";
 
+  const messages = {
+    new: { heading: "وصلنا طلبك", copy: "فريق المنشأة سيبدأ تجهيزه. تقدر تتابع حالته من هنا." },
+    preparing: { heading: "نجهّز طلبك", copy: "خذ راحتك، طلبك قيد التجهيز. بنوضح لك هنا أول ما يكون جاهز." },
+    ready: { heading: "طلبك جاهز!", copy: "تفضّل إلى الكاونتر وأظهر رقم طلبك لاستلامه." },
+    delivered: { heading: "بالعافية عليك", copy: "تم تسليم طلبك. سعدنا بزيارتك ونتمنى نشوفك قريب." },
+    cancelled: { heading: "تم إلغاء الطلب", copy: "راجع فريق المنشأة إذا احتجت إلى مساعدة بخصوص طلبك." },
+  };
+
   function view() {
-    const state = load();
     if (params.get("demo") === "1") {
       return {
         found: true,
         demo: true,
         id: "demo",
-        org: "منشأة تجريبية",
+        org: "مقهى البُن",
         logo: "",
         number: "007",
-        status: "ready",
+        status: demoStatus,
         createdAt: demoCreatedAt,
-        notify: state.demoNotify,
-        denied: Boolean(state.notifyDenied.demo),
+        notify: enabledAlerts.has("demo"),
       };
     }
-    const code = params.get("code") || "";
-    const order = state.orders.find((item) => item.id === code);
+    const state = load();
+    const order = state.orders.find((item) => item.id === params.get("code"));
     if (!order || !state.establishment) return { found: false };
     return {
       found: true,
@@ -1151,10 +1162,9 @@ function initCustomer() {
       org: state.establishment.name,
       logo: state.establishment.logo || "",
       number: order.number,
-      status: order.status,
+      status: statuses.includes(order.status) ? order.status : "new",
       createdAt: order.createdAt,
-      notify: order.notify,
-      denied: Boolean(state.notifyDenied[order.id]),
+      notify: enabledAlerts.has(order.id),
     };
   }
 
@@ -1170,79 +1180,92 @@ function initCustomer() {
     }
     invalid.hidden = true;
     card.hidden = false;
+    card.dataset.state = current.status;
+    card.classList.toggle("customer-ringing", current.status === "ready" && current.notify);
     document.querySelector("#org-name").textContent = current.org;
     const logo = document.querySelector("#org-logo");
-    if (current.logo) {
-      logo.src = current.logo;
-      logo.hidden = false;
-    } else {
-      logo.hidden = true;
-    }
+    if (current.logo) logo.src = current.logo;
+    logo.hidden = !current.logo;
+    document.querySelector("#org-monogram").hidden = Boolean(current.logo);
     document.querySelector("#order-number").textContent = current.number;
+    document.querySelector("#pager-number").textContent = current.number;
+    document.querySelector("#pager-state").textContent = statusLabel(current.status);
     const status = document.querySelector("#order-status");
     status.className = "badge badge-" + current.status;
     status.textContent = statusLabel(current.status);
-    document.querySelector("#order-time").textContent = formatTime(current.createdAt);
-    document.querySelector("#status-copy").textContent = statusSentence(current.status);
-    const closed = current.status === "delivered" || current.status === "cancelled";
-    document.querySelector("#notify-wrap").hidden = closed;
-    if (closed) return;
-    const unsupported = typeof Notification === "undefined";
-    button.disabled = unsupported || current.denied;
-    if (unsupported) button.textContent = "التنبيه غير متاح";
-    else if (current.denied) button.textContent = "التنبيه غير مفعّل";
-    else if (current.notify) button.textContent = "التنبيه مفعّل";
-    else button.textContent = "تفعيل تنبيه الجاهزية";
-    note.hidden = !(unsupported || current.denied);
-    if (unsupported) note.textContent = "هذا المتصفح لا يدعم تنبيه الجاهزية. تبقى متابعة الحالة متاحة.";
-    if (current.denied) note.textContent = "لم يُفعّل التنبيه. يمكنك متابعة الحالة من هذه الصفحة.";
+    const time = document.querySelector("#order-time");
+    time.textContent = formatTime(current.createdAt);
+    time.setAttribute("datetime", current.createdAt);
+    document.querySelector("#customer-heading").textContent = messages[current.status].heading;
+    document.querySelector("#status-copy").textContent = messages[current.status].copy;
+
+    const cancelled = current.status === "cancelled";
+    document.querySelector("#customer-progress").hidden = cancelled;
+    const currentIndex = statuses.indexOf(current.status);
+    for (const [index, step] of [...document.querySelectorAll("[data-order-step]")].entries()) {
+      step.classList.toggle("is-complete", !cancelled && index < currentIndex);
+      step.classList.toggle("is-current", !cancelled && index === currentIndex);
+      if (!cancelled && index === currentIndex) step.setAttribute("aria-current", "step");
+      else step.removeAttribute("aria-current");
+    }
+
+    document.querySelector("#notify-wrap").hidden = ["ready", "delivered", "cancelled"].includes(current.status);
+    button.textContent = current.notify ? "التنبيه التجريبي مفعّل" : "تفعيل تنبيه الجاهزية";
+    button.setAttribute("aria-pressed", String(current.notify));
+    note.hidden = !current.notify;
+    note.textContent = "سيظهر تنبيه داخل الصفحة عندما يصبح طلبك جاهزًا.";
+    document.querySelector("#customer-ready-alert").hidden = !(current.status === "ready" && current.notify);
+    document.querySelector("#customer-demo").hidden = !current.demo;
+    for (const control of document.querySelectorAll("[data-demo-status]")) {
+      control.setAttribute("aria-pressed", String(control.dataset.demoStatus === current.status));
+    }
   }
 
-  button.addEventListener("click", async () => {
+  button.addEventListener("click", () => {
     const current = view();
-    if (!current.found || current.denied) return;
-    const state = load();
+    if (!current.found) return;
     if (current.notify) {
-      if (current.demo) state.demoNotify = false;
-      else {
-        const order = state.orders.find((item) => item.id === current.id);
-        if (order) order.notify = false;
-      }
-      persist(state);
-      signature = "";
+      enabledAlerts.delete(current.id);
       paint();
       return;
     }
-    let permission = "denied";
-    try {
-      permission = Notification.permission === "granted" ? "granted" : await Notification.requestPermission();
-    } catch (error) {
-      permission = "denied";
-    }
-    const fresh = load();
-    if (permission !== "granted") {
-      fresh.notifyDenied[current.id] = true;
-      if (!current.demo) {
-        const order = fresh.orders.find((item) => item.id === current.id);
-        if (order) order.notify = false;
-      } else fresh.demoNotify = false;
-    } else if (current.demo) {
-      fresh.demoNotify = true;
-    } else {
-      const order = fresh.orders.find((item) => item.id === current.id);
-      if (order) order.notify = true;
-    }
-    persist(fresh);
-    signature = "";
+    dialog.returnValue = "";
+    dialog.showModal();
+  });
+
+  dialog.addEventListener("close", () => {
+    if (dialog.returnValue !== "enable") return;
+    const current = view();
+    if (!current.found || ["delivered", "cancelled"].includes(current.status)) return;
+    enabledAlerts.add(current.id);
     paint();
   });
 
+  for (const control of document.querySelectorAll("[data-demo-status]")) {
+    control.addEventListener("click", () => {
+      if (params.get("demo") !== "1") return;
+      demoStatus = control.dataset.demoStatus;
+      paint();
+    });
+  }
+
   paint();
+  window.addEventListener("storage", paint);
   window.setInterval(paint, 1000);
 }
 
 function boot() {
   bindLogout();
+  for (const button of document.querySelectorAll("[data-password-toggle]")) {
+    button.addEventListener("click", () => {
+      const input = document.getElementById(button.getAttribute("aria-controls"));
+      const show = input.type === "password";
+      input.type = show ? "text" : "password";
+      button.textContent = show ? "إخفاء" : "إظهار";
+      button.setAttribute("aria-pressed", String(show));
+      button.setAttribute("aria-label", button.textContent + " " + input.labels[0].textContent.trim());
+    });
+  }
   const page = document.body.dataset.page || "";
   const appPages = ["dashboard", "orders", "create-order", "members"];
   if (appPages.includes(page)) {
