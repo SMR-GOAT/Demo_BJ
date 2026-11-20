@@ -1,0 +1,66 @@
+/* Create order page */
+[data-page="create-order"] .btn {
+  min-height: 2.85rem;
+  padding-inline: 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.create-order-panel.card,
+.create-order-result.card,
+.create-order-guide.card {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 12px 30px -28px rgb(38 28 30 / 28%);
+}
+
+[data-page="create-order"] .create-order-number {
+  width: min(100%, 16rem);
+  height: 5.3rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid #d6bdc8;
+  border-radius: 10px;
+  background: #fefbfc;
+  color: var(--brand);
+  font-size: 2.7rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.create-order-number::placeholder { color: #c4a9b5; opacity: 1; }
+.create-order-number:focus { outline: 0; border-color: var(--brand); box-shadow: 0 0 0 3px rgb(128 0 32 / 8%); }
+.create-order-number[aria-invalid="true"] { border-color: #a62d4b; }
+.create-order-info { display: flex; align-items: flex-start; gap: 0.65rem; padding: 1rem; border: 1px solid #eee3e8; border-radius: 8px; background: #fcf9fb; line-height: 1.8; color: #746871; }
+.create-order-status.badge { height: auto; flex-shrink: 0; margin-top: 0.1rem; padding: 0.1rem 0.55rem; border: 1px solid #e6dbe8; border-radius: 5px; background: #f7f1f8; color: #79557f; font-size: 0.75rem; }
+.create-order-guide.card { padding: 1.5rem; background: #fcfafb; }
+.create-order-steps { display: grid; gap: 1.35rem; margin: 0; padding: 0; list-style: none; }
+.create-order-steps li { padding-inline-start: 1rem; border-inline-start: 2px solid #e4cbd6; }
+.create-order-steps strong { color: #4e3340; font-size: 0.875rem; }
+.create-order-steps p { margin: 0.3rem 0 0; color: #746871; font-size: 0.875rem; line-height: 1.8; }
+.create-order-result.card { padding: 1.5rem; }
+.create-order-check { display: grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 6px; background: #eaf6ef; color: #327554; }
+.create-order-ticket { padding: 1.4rem 1rem; border: 1px dashed #d8c8d0; border-radius: 9px; background: #fdfafb; text-align: center; }
+.create-order-ticket img {
+  display: block;
+  width: 100%;
+  max-width: 17.5rem;
+  height: auto;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  padding: 0.5rem;
+  border: 1px solid #eee5ea;
+  border-radius: 6px;
+  background: white;
+}
+#result:not([hidden]) + .create-order-guide { display: none; }
+[data-page="create-order"] .alert { border-radius: 8px; font-size: 0.875rem; }
+
+@media (max-width: 420px) {
+  .create-order-info { flex-direction: column; gap: 0.5rem; }
+  .create-order-result.card, .create-order-guide.card { padding: 1.25rem; }
+}

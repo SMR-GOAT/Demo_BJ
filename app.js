@@ -226,12 +226,16 @@ function fillChrome(state) {
   const who = document.querySelector("[data-who]");
   if (org) org.textContent = state.establishment ? state.establishment.name : "";
   if (who && state.session) {
-    who.textContent = state.session.name + " · " + roleLabel(state.session.role);
+    const role = window.ebajrI18n
+      ? window.ebajrI18n.text("sidebar.role." + state.session.role)
+      : roleLabel(state.session.role);
+    who.textContent = state.session.name + " · " + role;
   }
   const file = location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll(".main-nav a").forEach((link) => {
-    const href = (link.getAttribute("href") || "").replace("./", "");
+    const href = new URL(link.href).pathname.split("/").pop();
     if (href === file) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
   });
   document.querySelectorAll(".admin-link").forEach((link) => {
     link.hidden = !state.session || state.session.role !== "admin";
@@ -1188,7 +1192,6 @@ function initCustomer() {
     logo.hidden = !current.logo;
     document.querySelector("#org-monogram").hidden = Boolean(current.logo);
     document.querySelector("#order-number").textContent = current.number;
-    document.querySelector("#pager-number").textContent = current.number;
     document.querySelector("#pager-state").textContent = statusLabel(current.status);
     const status = document.querySelector("#order-status");
     status.className = "badge badge-" + current.status;
@@ -1258,6 +1261,7 @@ function boot() {
   // Build shared elements before binding their buttons and filling account data.
   if (document.getElementById("app-sidebar")) {
     renderSidebar();
+    if (window.ebajrI18n) window.ebajrI18n.apply();
   }
 
   bindLogout();

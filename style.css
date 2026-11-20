@@ -441,13 +441,13 @@ p { margin: 0 0 0.75rem; }
 .customer-org p { margin: 0; font-size: 0.75rem; color: var(--muted); }
 .customer-org h1 { margin: 0; font-size: 1.05rem; overflow-wrap: anywhere; }
 .customer-org .badge { margin-inline-start: auto; flex-shrink: 0; border-radius: 5px; font-size: 0.75rem; }
-.customer-stage { display: grid; grid-template-columns: 8rem minmax(0, 1fr); align-items: center; gap: 1.5rem; padding: 2rem 1.5rem; border-block: 1px solid rgb(38 28 30 / 4%); background: var(--state-tint); }
-.pager-device { width: 7.5rem; padding: 0.6rem 0.7rem 0.7rem; border: 2px solid #493a42; border-radius: 14px; background: #2a2227; color: #d9cfd4; transform: rotate(6deg); box-shadow: 3px 12px 15px -12px rgb(38 28 30 / 65%); }
+.customer-stage { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); align-items: center; gap: 1.2rem; padding: 2rem 1.5rem; border-block: 1px solid rgb(38 28 30 / 4%); background: var(--state-tint); }
+.pager-device { width: 9rem; padding: 0.6rem 0.7rem 0.7rem; border: 2px solid #493a42; border-radius: 14px; background: #2a2227; color: #d9cfd4; transform: rotate(6deg); box-shadow: 3px 12px 15px -12px rgb(38 28 30 / 65%); }
 .pager-top { display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; font-size: 0.55rem; font-family: Arial, sans-serif; font-weight: 700; letter-spacing: 0.07em; direction: ltr; }
 .pager-led { width: 5px; height: 5px; border-radius: 50%; background: #b78394; }
-.pager-display { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 7.1rem; gap: 0.1rem; margin-top: 0.5rem; border-radius: 5px; background: var(--device-screen); color: #372831; }
+.pager-display { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 8rem; gap: 0.1rem; margin-top: 0.5rem; border-radius: 5px; background: var(--device-screen); color: #372831; }
 .pager-order-label { font-size: 0.65rem; }
-.pager-display bdi { font-family: Arial, sans-serif; font-size: 2.65rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.04em; }
+.pager-display bdi { font-family: Arial, sans-serif; font-size: 3.6rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.04em; }
 #pager-state { font-size: 0.65rem; font-weight: 700; color: var(--state-color); }
 .pager-lights { display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.7rem; }
 .pager-lights span { width: 4px; height: 4px; border-radius: 50%; background: #8b6c7a; }
@@ -459,10 +459,7 @@ p { margin: 0 0 0.75rem; }
 .customer-ticket-details::before, .customer-ticket-details::after { position: absolute; bottom: -8px; width: 16px; height: 16px; border: 1px solid var(--line); border-radius: 50%; background: var(--bg); content: ""; }
 .customer-ticket-details::before { right: -9px; }
 .customer-ticket-details::after { left: -9px; }
-.customer-number-row { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
-.customer-number-row p { margin: 0; color: var(--muted); font-size: 0.875rem; }
-#order-number { display: block; margin-top: 0.1rem; font-size: 2.5rem; font-weight: 800; line-height: 1.2; }
-.customer-time { max-width: 11rem; text-align: end; }
+.customer-time { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .customer-time span { display: block; color: var(--muted); font-size: 0.75rem; }
 .customer-time time { font-size: 0.75rem; }
 .customer-progress { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; margin: 1.4rem 0 0; padding: 0; }
@@ -516,13 +513,12 @@ p { margin: 0 0 0.75rem; }
   .customer-org { padding-inline: 1rem; gap: 0.5rem; }
   .customer-org h1 { font-size: 0.95rem; }
   .customer-org .badge { font-size: 0.65rem; padding-inline: 0.3rem; }
-  .customer-stage { grid-template-columns: 6.3rem minmax(0, 1fr); gap: 1rem; padding: 1.6rem 1rem; }
-  .pager-device { width: 6.2rem; padding-inline: 0.5rem; }
+  .customer-stage { grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; padding: 1.6rem 1rem; }
+  .pager-device { width: 6.9rem; padding-inline: 0.5rem; }
   .pager-display { min-height: 6.4rem; }
-  .pager-display bdi { font-size: 2.3rem; }
+  .pager-display bdi { font-size: 2.8rem; }
   .customer-message h2 { font-size: 1.4rem; }
   .customer-ticket-details, .customer-notify { padding-inline: 1rem; }
-  .customer-time { max-width: 8rem; }
   .customer-progress li { font-size: 0.65rem; }
 }
 
@@ -650,7 +646,29 @@ body[data-page="landing"] {
 [data-page="landing"] .faq-item[open] { border-color: #bf8d9b; }
 [data-page="landing"] .faq-item p { padding-block: 0.1rem 0.5rem; }
 
-[data-page="landing"] .site-footer { padding: 0; background: #f9f7f8; }
+[data-page="landing"] .site-footer {
+  --muted: #d7c9d0;
+  --line: #54434b;
+  padding: 0;
+  background: #261c1e;
+  color: #f7f0f3;
+}
+
+[data-page="landing"] .site-footer .logo { filter: brightness(0) invert(1); }
+[data-page="landing"] .site-footer .footer-column a:hover,
+[data-page="landing"] .site-footer .footer-bottom a:hover { color: #fff; }
+[data-page="landing"] .site-footer a:focus-visible { outline-color: #ead5dd; }
+[data-page="landing"] .site-footer .language-toggle {
+  border-color: #66515c;
+  background: #34282f;
+  color: #f7f0f3;
+}
+
+[data-page="landing"] .site-footer .language-toggle:hover {
+  border-color: #a07f8f;
+  background: #44323c;
+  color: #fff;
+}
 .landing-footer-grid { display: grid; gap: 2rem; padding-block: 3rem; }
 .footer-brand .logo { width: 8rem; }
 .footer-brand p { max-width: 24rem; margin-block: 0.9rem 1rem; }
@@ -878,6 +896,12 @@ body.app-page {
   min-height: 2rem;
   padding-inline: 0.7rem;
   border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.dashboard-sidebar .sidebar-language {
+  min-height: 2rem;
+  padding: 0.15rem 0.6rem;
   font-size: 0.75rem;
 }
 

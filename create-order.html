@@ -1,13 +1,18 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>E-Bajr | طلب جديد</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="./script.js"></script>
     <link rel="stylesheet" href="./style.css" />
+    <script src="./i18n.js" defer></script>
+    <link rel="stylesheet" href="./styles/create-order.css" />
     <script>
       try {
         var data = JSON.parse(localStorage.getItem("ebajr-demo") || "null");
@@ -19,49 +24,71 @@
       }
     </script>
   </head>
-  <body data-page="create-order">
-    <header class="topbar">
-      <div class="wrap topbar-inner">
-        <a class="brand" href="./dashboard.html"><img class="logo" src="./e-bajr-logo.png" alt="E-Bajr" width="120" height="40" /></a>
-        <nav class="main-nav" aria-label="القائمة">
-          <a href="./dashboard.html">لوحة المتابعة</a>
-          <a href="./orders.html">الطلبات</a>
-          <a href="./create-order.html">طلب جديد</a>
-          <a class="admin-link" href="./members.html">الأعضاء</a>
-        </nav>
-        <div class="session">
-          <p class="session-meta"><span data-org></span><strong data-who></strong></p>
-          <button class="btn btn-quiet btn-sm" type="button" data-logout>خروج</button>
-        </div>
-      </div>
-    </header>
-    <main class="page">
-      <div class="wrap" style="display: grid; gap: 1rem; width: min(640px, calc(100% - 2rem))">
-        <section class="card">
-          <h1>طلب جديد</h1>
-          <p class="muted">أدخل آخر ثلاثة أرقام من الفاتورة. تُحفظ الأصفار في البداية، مثل 007.</p>
-          <p id="form-alert" class="alert" role="status" hidden></p>
-          <form id="create-form" novalidate>
-            <label class="field">
-              <span>رقم الطلب</span>
-              <input class="pin-input" name="number" type="text" inputmode="numeric" maxlength="3" dir="ltr" autocomplete="off" autofocus aria-describedby="number-error" required />
-              <p id="number-error" class="field-error" hidden></p>
-            </label>
-            <button class="btn" type="submit">إنشاء الطلب</button>
-          </form>
-        </section>
-        <section class="card" id="result" hidden aria-live="polite">
-          <h2>رمز الطلب</h2>
-          <p class="muted">الحالة الآن: جديد. امسح العميل هذا الرمز لمتابعة طلبه.</p>
-          <p class="preview-number"><bdi id="result-number" dir="ltr"></bdi></p>
-          <img src="./demo-order-qr.png" alt="رمز QR للطلب" width="140" height="140" />
-          <div class="row-actions" style="margin-top: 0.8rem">
-            <a class="btn btn-quiet" id="result-link" href="./order.html">فتح صفحة العميل</a>
-            <a class="btn btn-quiet" href="./orders.html">قائمة الطلبات</a>
+  <body data-page="create-order" class="app-page">
+    <div class="dashboard-layout">
+      <aside id="app-sidebar" class="dashboard-sidebar" aria-label="مساحة العمل" data-i18n-aria-label="sidebar.workspace"></aside>
+
+      <main class="dashboard-main">
+        <header class="flex flex-wrap items-center justify-between gap-4 mb-7">
+          <div>
+            <h1 class="text-2xl font-extrabold mb-2">طلب جديد</h1>
+            <p class="text-sm text-[#746871] m-0">سجّل الطلب وشارك صفحة المتابعة مع العميل.</p>
           </div>
-        </section>
-      </div>
-    </main>
+          <a class="btn btn-quiet" href="./orders.html">عرض الطلبات</a>
+        </header>
+
+        <div class="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,0.9fr)]">
+          <section class="card create-order-panel" aria-labelledby="create-title">
+            <header class="px-6 py-5 border-b border-burgundyGray-200/40">
+              <h2 id="create-title" class="text-lg font-extrabold m-0">بيانات الطلب</h2>
+            </header>
+            <div class="p-6">
+              <p id="form-alert" class="alert" role="status" hidden></p>
+              <form id="create-form" novalidate>
+                <label class="flex flex-col items-start gap-3" for="create-number">
+                  <span class="text-sm font-bold">آخر ثلاثة أرقام من الفاتورة</span>
+                  <input id="create-number" class="input input-bordered create-order-number" name="number" type="text" inputmode="numeric" maxlength="3" dir="ltr" autocomplete="off" placeholder="007" aria-describedby="number-hint number-error" required />
+                </label>
+                <p id="number-hint" class="mt-3 mb-0 text-sm text-[#746871]">أدخل الأرقام كما هي، بما فيها الأصفار في البداية.</p>
+                <p id="number-error" class="field-error mt-2" hidden></p>
+                <div class="create-order-info mt-6">
+                  <span class="badge create-order-status">جديد</span>
+                  <p class="m-0 text-sm">يبدأ الطلب بهذه الحالة، ويمكنك تحديثها من قائمة الطلبات.</p>
+                </div>
+                <button class="btn w-full mt-6" type="submit">إنشاء الطلب</button>
+              </form>
+            </div>
+          </section>
+
+          <div>
+            <section class="card create-order-result" id="result" hidden aria-live="polite" aria-labelledby="result-title">
+              <div class="flex items-center gap-2 mb-4"><span class="create-order-check" aria-hidden="true">✓</span><h2 id="result-title" class="text-lg font-extrabold m-0">تم تسجيل الطلب</h2></div>
+              <p class="text-sm text-[#746871]">اعرض الرمز للعميل لشرح فكرة المتابعة.</p>
+              <div class="create-order-ticket">
+                <span class="text-sm text-[#746871]">رقم الطلب</span>
+                <bdi id="result-number" dir="ltr" class="block text-4xl font-extrabold mt-2 mb-4"></bdi>
+                <img src="./demo-order-qr.png" alt="رمز QR توضيحي للطلب" width="280" height="280" class="mx-auto" />
+                <p class="mt-3 mb-0 text-xs text-[#746871]">رمز QR توضيحي</p>
+              </div>
+              <div class="flex flex-col gap-2 mt-5">
+                <a class="btn" id="result-link" href="./order.html">فتح صفحة العميل</a>
+                <a class="btn btn-quiet" href="./orders.html">قائمة الطلبات</a>
+              </div>
+            </section>
+
+            <section class="card create-order-guide" aria-labelledby="guide-title">
+              <h2 id="guide-title" class="text-lg font-extrabold mb-5">من الفاتورة إلى الاستلام</h2>
+              <ol class="create-order-steps">
+                <li><strong>سجّل رقم الطلب</strong><p>استخدم آخر ثلاثة أرقام من فاتورة العميل.</p></li>
+                <li><strong>شارك رمز المتابعة</strong><p>يتابع العميل حالة طلبه من جواله.</p></li>
+                <li><strong>حدّث الحالة</strong><p>حدّد الجاهزية، ثم أكّد التسليم عند الاستلام.</p></li>
+              </ol>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="./components/sidebar.js" defer></script>
     <script src="./app.js" defer></script>
   </body>
 </html>
