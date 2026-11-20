@@ -1255,6 +1255,11 @@ function initCustomer() {
 }
 
 function boot() {
+  // Build shared elements before binding their buttons and filling account data.
+  if (document.getElementById("app-sidebar")) {
+    renderSidebar();
+  }
+
   bindLogout();
   for (const button of document.querySelectorAll("[data-password-toggle]")) {
     button.addEventListener("click", () => {
