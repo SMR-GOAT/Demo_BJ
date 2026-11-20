@@ -1,6 +1,15 @@
 (() => {
   const messages = {
     ar: {
+      "sidebar.workspace": "مساحة العمل",
+      "sidebar.establishment": "منشأتك",
+      "sidebar.dashboard": "لوحة المتابعة",
+      "sidebar.orders": "الطلبات",
+      "sidebar.newOrder": "طلب جديد",
+      "sidebar.members": "الأعضاء",
+      "sidebar.logout": "تسجيل الخروج",
+      "sidebar.role.admin": "مدير",
+      "sidebar.role.staff": "موظف",
       "page.title": "E-Bajr | بيجر عميلك في جواله",
       "page.description": "استبدل البيجر التقليدي بتجربة متابعة الطلب من جوال العميل مع E-Bajr.",
       "nav.home": "E-Bajr، الرئيسية",
@@ -80,6 +89,15 @@
       "order.back": "العودة للرئيسية",
     },
     en: {
+      "sidebar.workspace": "Workspace",
+      "sidebar.establishment": "Your establishment",
+      "sidebar.dashboard": "Dashboard",
+      "sidebar.orders": "Orders",
+      "sidebar.newOrder": "New order",
+      "sidebar.members": "Members",
+      "sidebar.logout": "Log out",
+      "sidebar.role.admin": "Admin",
+      "sidebar.role.staff": "Staff",
       "page.title": "E-Bajr | Your customer's phone is their pager",
       "page.description": "Replace the traditional pager with order tracking on your customer's phone.",
       "nav.home": "E-Bajr home",
@@ -167,7 +185,7 @@
   document.documentElement.lang = language;
   document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function applyTranslations() {
     for (const element of document.querySelectorAll("[data-i18n]")) {
       const text = translation[element.dataset.i18n];
       if (typeof text === "string") element.textContent = text;
@@ -182,16 +200,14 @@
     }
 
     const nextLanguage = language === "ar" ? "en" : "ar";
-    pageUrl.searchParams.set("lang", nextLanguage);
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.set("lang", nextLanguage);
 
     for (const link of document.querySelectorAll("[data-language-toggle]")) {
-      link.href = pageUrl.href;
+      link.href = nextUrl.href;
       link.lang = nextLanguage;
       link.hreflang = nextLanguage;
       link.textContent = nextLanguage === "en" ? "English" : "العربية";
-      window.addEventListener("hashchange", () => {
-        link.hash = window.location.hash;
-      });
     }
 
     for (const link of document.querySelectorAll("[data-keep-language]")) {
@@ -199,5 +215,23 @@
       url.searchParams.set("lang", language);
       link.href = url.href;
     }
+  }
+
+  window.ebajrI18n = {
+    language,
+    text: (key) => translation[key] || key,
+    apply: applyTranslations,
+  };
+
+  window.addEventListener("hashchange", () => {
+    for (const link of document.querySelectorAll("[data-language-toggle]")) {
+      link.hash = window.location.hash;
+    }
   });
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyTranslations);
+  } else {
+    applyTranslations();
+  }
 })();

@@ -899,6 +899,12 @@ body.app-page {
   font-size: 0.75rem;
 }
 
+.dashboard-sidebar .sidebar-language {
+  min-height: 2rem;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.75rem;
+}
+
 .dashboard-main {
   width: min(100%, 80rem);
   min-width: 0;

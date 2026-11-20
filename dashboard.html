@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
+    <script src="./i18n.js" defer></script>
     <script>
       try {
         var data = JSON.parse(localStorage.getItem("ebajr-demo") || "null");
@@ -21,7 +22,7 @@
   </head>
   <body data-page="dashboard" class="app-page">
     <div class="dashboard-layout">
-      <aside id="app-sidebar" class="dashboard-sidebar" aria-label="مساحة العمل"></aside>
+      <aside id="app-sidebar" class="dashboard-sidebar" aria-label="مساحة العمل" data-i18n-aria-label="sidebar.workspace"></aside>
 
       <main class="dashboard-main">
         <div class="dashboard-heading">
