@@ -910,3 +910,214 @@ body.app-page {
   .dashboard-nav-icon { display: none; }
   .dashboard-main { padding-inline: 1rem; }
 }
+
+/* Dashboard overview */
+.dashboard-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.dashboard-heading h1 {
+  margin-bottom: 0.4rem;
+  font-size: clamp(1.65rem, 2.7vw, 2rem);
+  font-weight: 800;
+}
+
+.dashboard-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.dashboard-heading .btn {
+  min-height: 2.8rem;
+  gap: 0.6rem;
+  padding-inline: 1.15rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  box-shadow: 0 7px 16px -10px rgb(128 0 32 / 45%);
+}
+
+.dashboard-heading .btn span {
+  font-family: Arial, sans-serif;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.dashboard-metric {
+  min-width: 0;
+  padding: 1.2rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px -22px rgb(38 28 30 / 25%);
+}
+
+.dashboard-metric-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.dashboard-metric h2 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.dashboard-metric-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 2rem;
+  height: 2rem;
+  border-radius: 7px;
+  background: #f5eff4;
+  color: #805b79;
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+}
+
+.dashboard-metric b {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 2.7rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-metric p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.dashboard-metric-total {
+  border-color: #800020;
+  background: #800020;
+  color: #fff;
+}
+
+.dashboard-metric-total .dashboard-metric-icon {
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
+}
+
+.dashboard-metric-total p { color: #efd6df; }
+.dashboard-metric-preparing .dashboard-metric-icon { background: #fbf3e6; color: #966d29; }
+.dashboard-metric-preparing b { color: #8a6222; }
+.dashboard-metric-ready .dashboard-metric-icon { background: #eaf6ef; color: #327554; }
+.dashboard-metric-ready b { color: #327554; }
+
+.dashboard-orders {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 30px -28px rgb(38 28 30 / 25%);
+}
+
+.dashboard-orders-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.dashboard-orders-heading h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.dashboard-orders-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.dashboard-orders-heading a {
+  padding: 0.4rem 0;
+  color: var(--brand);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dashboard-orders-heading a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.dashboard-orders .table-wrap { padding: 0 1.5rem; }
+.dashboard-orders .data-table th { padding-block: 0.8rem; color: #8a7982; font-size: 0.8rem; font-weight: 600; }
+.dashboard-orders .data-table td { padding-block: 1rem; font-size: 0.875rem; }
+.dashboard-orders .data-table td:first-child bdi { display: inline-flex; justify-content: center; min-width: 3rem; padding: 0.25rem 0.4rem; border: 1px solid #eee5ea; border-radius: 6px; background: #faf7f9; font-size: 1rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.dashboard-orders .data-table tr:last-child td { border-bottom: 0; }
+.dashboard-orders .data-table .badge { padding: 0.15rem 0.65rem; border-radius: 5px; font-size: 0.8rem; font-weight: 600; }
+.dashboard-orders .badge-new { border-color: #e5d9e7; background: #f7f1f8; color: #79557f; }
+.dashboard-orders .badge-preparing { border-color: #efdfbe; background: #fcf6e9; color: #926a29; }
+.dashboard-orders .badge-ready { border-color: #cfe5d7; background: #eff8f2; color: #2f7151; }
+
+.dashboard-empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.dashboard-empty h3 { font-size: 1.1rem; }
+.dashboard-empty p { color: var(--muted); font-size: 0.875rem; }
+.dashboard-empty .btn { margin-top: 0.5rem; border-radius: 8px; font-size: 0.875rem; }
+.dashboard-demo { margin-top: 1.25rem; color: var(--muted); font-size: 0.75rem; }
+.dashboard-demo summary { width: fit-content; padding-block: 0.4rem; cursor: pointer; }
+.dashboard-demo .alert { margin-top: 0.4rem; border: 1px solid #efdde3; border-radius: 8px; font-size: 0.8rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .dashboard-metric { animation: dashboard-enter 400ms ease-out both; }
+  .dashboard-metric:nth-child(2) { animation-delay: 40ms; }
+  .dashboard-metric:nth-child(3) { animation-delay: 80ms; }
+  .dashboard-metric:nth-child(4) { animation-delay: 120ms; }
+}
+
+@keyframes dashboard-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 1150px) {
+  .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+
+@media (max-width: 760px) {
+  .dashboard-orders .table-wrap { padding: 0.9rem; }
+  .dashboard-orders .data-table tr { border-color: var(--line); border-radius: 8px; padding: 0.85rem; }
+  .dashboard-orders .data-table td { padding: 0; align-items: center; }
+  .dashboard-orders .data-table tr:last-child { margin-bottom: 0; }
+}
+
+@media (max-width: 420px) {
+  .dashboard-heading { align-items: flex-start; }
+  .dashboard-heading h1 { font-size: 1.65rem; }
+  .dashboard-heading .btn { min-height: 2.5rem; padding-inline: 0.85rem; }
+  .dashboard-metrics { gap: 0.7rem; }
+  .dashboard-metric { padding: 1rem 0.85rem; }
+  .dashboard-metric-top { align-items: flex-start; margin-bottom: 0.85rem; }
+  .dashboard-metric h2 { font-size: 0.8rem; }
+  .dashboard-metric-icon { flex-basis: 1.5rem; height: 1.5rem; font-size: 0.95rem; }
+  .dashboard-metric b { font-size: 2.4rem; }
+  .dashboard-metric p { font-size: 0.7rem; }
+  .dashboard-orders-heading { padding: 1rem; }
+}
