@@ -754,3 +754,159 @@ body[data-page="landing"] {
   html { scroll-behavior: auto; }
   .rise, .btn { animation: none; transition: none; }
 }
+
+/* Shared workspace layout and sidebar */
+body.app-page {
+  --bg: #f7f6f8;
+  --card: #fff;
+  --ink: #261c1e;
+  --muted: #7b6f76;
+  --line: #e8e1e6;
+  border-top: 0;
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 14.5rem minmax(0, 1fr);
+  min-height: 100svh;
+}
+
+.dashboard-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  height: 100svh;
+  padding: 1.8rem 1rem 1.25rem;
+  border-inline-end: 1px solid var(--line);
+  background: #fff;
+}
+
+.dashboard-brand {
+  justify-content: center;
+  margin-bottom: 1.8rem;
+}
+
+.dashboard-brand .logo { width: 7.4rem; }
+
+.dashboard-org {
+  min-width: 0;
+  margin-bottom: 1.4rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid #eee5e9;
+  border-radius: 10px;
+  background: #fbf8fa;
+}
+
+.dashboard-org span {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.dashboard-org strong {
+  display: block;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-sidebar .main-nav {
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.dashboard-sidebar .main-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 8px;
+  color: #786771;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.dashboard-sidebar .main-nav a:hover {
+  background: #f9f5f7;
+  color: var(--brand);
+}
+
+.dashboard-sidebar .main-nav a[aria-current="page"] {
+  background: #fbf0f3;
+  color: var(--brand);
+  box-shadow: none;
+  font-weight: 800;
+}
+
+.dashboard-nav-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 1.25rem;
+  height: 1.25rem;
+  font-family: Arial, sans-serif;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.dashboard-person { position: relative; }
+.dashboard-person::before { position: absolute; top: 1px; left: 7px; width: 6px; height: 6px; border: 1.5px solid currentColor; border-radius: 50%; content: ""; }
+.dashboard-person::after { position: absolute; bottom: 1px; left: 3px; width: 14px; height: 9px; border: 1.5px solid currentColor; border-radius: 8px 8px 3px 3px; content: ""; }
+
+.dashboard-sidebar .session {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: auto;
+  padding: 1.2rem 0.5rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.dashboard-sidebar .session-meta {
+  flex-basis: 100%;
+  text-align: start;
+}
+
+.dashboard-sidebar .session-meta strong {
+  font-size: 0.85rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-sidebar .session .btn {
+  min-height: 2rem;
+  padding-inline: 0.7rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.dashboard-main {
+  width: min(100%, 80rem);
+  min-width: 0;
+  margin-inline: auto;
+  padding: 2.5rem clamp(1.25rem, 3vw, 3rem) 3rem;
+}
+
+@media (max-width: 800px) {
+  .dashboard-layout { display: block; }
+  .dashboard-sidebar { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1rem; height: auto; padding: 1rem 1.25rem 0.8rem; border-inline-end: 0; border-bottom: 1px solid var(--line); }
+  .dashboard-brand { grid-column: 1; grid-row: 1; align-self: center; margin: 0; }
+  .dashboard-brand .logo { width: 6.5rem; }
+  .dashboard-org { grid-column: 2; grid-row: 1; margin: 0; padding: 0; border: 0; background: transparent; text-align: end; }
+  .dashboard-org span { display: none; }
+  .dashboard-sidebar .main-nav { grid-column: 1 / -1; grid-row: 2; flex-direction: row; justify-content: space-between; gap: 0.25rem; }
+  .dashboard-sidebar .main-nav a { justify-content: center; gap: 0.4rem; padding: 0.55rem 0.6rem; font-size: 0.8rem; }
+  .dashboard-sidebar .session { grid-column: 1 / -1; grid-row: 3; margin: 0; padding: 0.65rem 0 0; }
+  .dashboard-sidebar .session-meta { flex-basis: auto; flex: 1; }
+  .dashboard-sidebar .session-meta strong { font-size: 0.75rem; }
+  .dashboard-main { padding: 1.7rem 1.25rem 2rem; }
+}
+
+
+@media (max-width: 420px) {
+  .dashboard-sidebar { padding-inline: 1rem; }
+  .dashboard-sidebar .main-nav a { padding-inline: 0.45rem; }
+  .dashboard-nav-icon { display: none; }
+  .dashboard-main { padding-inline: 1rem; }
+}
