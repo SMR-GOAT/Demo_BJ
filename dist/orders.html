@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | الطلبات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="./script.js"></script>
+    <script src="./i18n.js" defer></script>
+    <script>
+      try {
+        var data = JSON.parse(localStorage.getItem("ebajr-demo") || "null");
+        if (!data || !data.session || data.session.role !== "admin" || !data.session.loggedIn) {
+          document.documentElement.classList.add("hide-admin");
+        }
+      } catch (error) {
+        document.documentElement.classList.add("hide-admin");
+      }
+    </script>
+    <link rel="stylesheet" crossorigin href="/assets/orders-Co6YSa_L.css">
+    <link rel="stylesheet" crossorigin href="/assets/style-CCO9BVZR.css">
+  </head>
+  <body data-page="orders" class="app-page">
+    <div class="dashboard-layout">
+      <aside id="app-sidebar" class="dashboard-sidebar" aria-label="مساحة العمل" data-i18n-aria-label="sidebar.workspace"></aside>
+
+      <main class="dashboard-main">
+        <header class="flex flex-wrap items-center justify-between gap-4 mb-7">
+          <div>
+            <h1 class="text-2xl font-extrabold mb-2">الطلبات</h1>
+            <p class="text-sm text-[#746871] m-0">تابع الطلبات النشطة وحدّث حالتها حتى الاستلام.</p>
+          </div>
+          <a class="btn gap-2" href="./create-order.html"><span aria-hidden="true">＋</span>طلب جديد</a>
+        </header>
+
+        <section class="card orders-panel" aria-labelledby="orders-title">
+          <div class="flex flex-wrap items-center justify-between gap-3 px-5 py-5 border-b border-burgundyGray-200/40">
+            <div class="flex flex-wrap items-center gap-3">
+              <h2 id="orders-title" class="text-lg font-extrabold m-0">قائمة الطلبات</h2>
+              <span class="badge orders-count"><bdi id="active-count" dir="ltr">0</bdi> طلب نشط</span>
+            </div>
+            <p class="text-xs text-[#746871] m-0">المسلّم والملغي يخرجان من القائمة</p>
+          </div>
+          <form id="search-form" class="grid gap-3 p-5 sm:grid-cols-[minmax(0,20rem)_auto] sm:items-end sm:justify-start" novalidate>
+            <label class="flex flex-col gap-2 text-sm font-bold" for="search-input">
+              ابحث برقم الطلب
+              <input id="search-input" class="input input-bordered w-full" type="text" inputmode="numeric" maxlength="3" dir="ltr" autocomplete="off" placeholder="007" />
+            </label>
+            <div class="flex gap-2">
+              <button class="btn" type="submit">بحث</button>
+              <button class="btn btn-quiet" id="clear-search" type="button">مسح البحث</button>
+            </div>
+          </form>
+          <p id="form-alert" class="alert" role="status" hidden></p>
+          <p id="orders-empty" class="orders-empty" hidden>لا توجد طلبات نشطة.</p>
+          <div class="table-wrap px-5 pb-2">
+            <table class="table data-table" id="orders-table">
+              <thead>
+                <tr><th>رقم الطلب</th><th>وقت التسجيل</th><th>الحالة</th><th>إجراءات الطلب</th></tr>
+              </thead>
+              <tbody id="orders-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="orders-dialog" id="edit-dialog">
+      <form id="edit-form" novalidate>
+        <h2>تعديل رقم الطلب</h2>
+        <p class="muted">متاح في حالتي جديد وقيد التجهيز، وبشرط ألا يطابق طلبًا نشطًا آخر.</p>
+        <label class="field">
+          <span>الرقم الجديد</span>
+          <input name="number" class="pin-input" type="text" inputmode="numeric" maxlength="3" dir="ltr" autocomplete="off" aria-describedby="edit-error" required />
+          <p id="edit-error" class="field-error" hidden></p>
+        </label>
+        <div class="row-actions">
+          <button class="btn btn-quiet" type="button" data-close>تراجع</button>
+          <button class="btn" type="submit">حفظ</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="orders-dialog" id="confirm-dialog">
+      <form method="dialog">
+        <h2>تأكيد</h2>
+        <p data-confirm-text></p>
+        <div class="row-actions">
+          <button class="btn btn-quiet" value="cancel">تراجع</button>
+          <button class="btn" value="ok">تأكيد</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="orders-dialog" id="history-dialog">
+      <h2>سجل الحالة</h2>
+      <ol class="history-list" id="history-list"></ol>
+      <form method="dialog" class="mt-4">
+        <button class="btn btn-quiet" value="close">إغلاق</button>
+      </form>
+    </dialog>
+    <script src="./components/sidebar.js" defer></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

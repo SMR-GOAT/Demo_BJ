@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | لوحة المتابعة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <script src="./i18n.js" defer></script>
+    <script>
+      try {
+        var data = JSON.parse(localStorage.getItem("ebajr-demo") || "null");
+        if (!data || !data.session || data.session.role !== "admin" || !data.session.loggedIn) {
+          document.documentElement.classList.add("hide-admin");
+        }
+      } catch (error) {
+        document.documentElement.classList.add("hide-admin");
+      }
+    </script>
+    <link rel="stylesheet" crossorigin href="/assets/style-CCO9BVZR.css">
+  </head>
+  <body data-page="dashboard" class="app-page">
+    <div class="dashboard-layout">
+      <aside id="app-sidebar" class="dashboard-sidebar" aria-label="مساحة العمل" data-i18n-aria-label="sidebar.workspace"></aside>
+
+      <main class="dashboard-main">
+        <div class="dashboard-heading">
+          <div>
+            <h1>لوحة المتابعة</h1>
+            <p>ملخص الطلبات النشطة في منشأتك.</p>
+          </div>
+          <a class="btn" href="./create-order.html"><span aria-hidden="true">＋</span>طلب جديد</a>
+        </div>
+        <section class="dashboard-metrics" aria-label="ملخص الطلبات">
+          <article class="dashboard-metric dashboard-metric-total">
+            <div class="dashboard-metric-top"><h2>الطلبات النشطة</h2><span class="dashboard-metric-icon" aria-hidden="true">▦</span></div>
+            <b id="stat-active">0</b>
+            <p>جميع الطلبات الحالية</p>
+          </article>
+          <article class="dashboard-metric">
+            <div class="dashboard-metric-top"><h2>طلبات جديدة</h2><span class="dashboard-metric-icon" aria-hidden="true">＋</span></div>
+            <b id="stat-new">0</b>
+            <p>بانتظار بدء التجهيز</p>
+          </article>
+          <article class="dashboard-metric dashboard-metric-preparing">
+            <div class="dashboard-metric-top"><h2>قيد التجهيز</h2><span class="dashboard-metric-icon" aria-hidden="true">◷</span></div>
+            <b id="stat-preparing">0</b>
+            <p>يعمل عليها الفريق الآن</p>
+          </article>
+          <article class="dashboard-metric dashboard-metric-ready">
+            <div class="dashboard-metric-top"><h2>جاهزة للاستلام</h2><span class="dashboard-metric-icon" aria-hidden="true">✓</span></div>
+            <b id="stat-ready">0</b>
+            <p>بانتظار استلام العميل</p>
+          </article>
+        </section>
+        <section class="dashboard-orders" aria-labelledby="recent-title">
+          <div class="dashboard-orders-heading">
+            <div><h2 id="recent-title">آخر الطلبات</h2><p>آخر خمسة طلبات نشطة في منشأتك.</p></div>
+            <a href="./orders.html">عرض كل الطلبات</a>
+          </div>
+          <div id="recent-empty" class="dashboard-empty" hidden>
+            <h3>لا توجد طلبات نشطة حاليًا</h3>
+            <p>عند تسجيل طلب جديد، ستجده هنا لمتابعة حالته.</p>
+            <a class="btn" href="./create-order.html">إنشاء طلب</a>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="recent-table">
+              <thead>
+                <tr><th>الرقم</th><th>وقت التسجيل</th><th>الحالة</th></tr>
+              </thead>
+              <tbody id="recent-body"></tbody>
+            </table>
+          </div>
+        </section>
+        <details class="dashboard-demo admin-link">
+          <summary>أدوات التجربة</summary>
+          <p id="staff-hint" class="alert" hidden>لتجربة صلاحية الموظف: اخرج ثم ادخل بالبريد sara@example.com</p>
+        </details>
+      </main>
+    </div>
+    <script src="./components/sidebar.js" defer></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

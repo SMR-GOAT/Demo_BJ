@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | إنشاء المنشأة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" crossorigin href="/assets/style-CCO9BVZR.css">
+  </head>
+  <body data-page="establishment" class="auth-screen">
+    <main class="auth-wrap">
+      <div class="auth-shell">
+        <div class="auth-topbar">
+          <a href="./index.html" aria-label="E-Bajr، الرئيسية"><img class="logo" src="./e-bajr-logo.png" alt="E-Bajr" width="120" height="40" /></a>
+          <a class="auth-home" href="./index.html">العودة للرئيسية</a>
+        </div>
+        <section class="auth-card" aria-labelledby="org-title">
+          <header class="auth-heading">
+            <h1 id="org-title">عرّفنا على منشأتك</h1>
+            <p>أضف اسم منشأتك وشعارها ليظهر لعملائك عند متابعة طلباتهم.</p>
+          </header>
+          <div class="auth-content">
+            <p id="form-alert" class="alert" role="status" hidden></p>
+            <form id="org-form" novalidate>
+              <div class="field">
+                <label for="org-name">اسم المنشأة</label>
+                <input id="org-name" name="name" type="text" autocomplete="organization" placeholder="مثال، مقهى البُن" aria-describedby="name-hint name-error" required />
+                <small id="name-hint" class="hint">الاسم الذي سيراه العميل في صفحة طلبه.</small>
+                <p id="name-error" class="field-error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="org-logo">شعار المنشأة <span class="optional-label">اختياري</span></label>
+                <input id="org-logo" name="logo" type="file" accept="image/*" aria-describedby="logo-hint logo-error" />
+                <small id="logo-hint" class="hint">اختر صورة واضحة لشعار منشأتك.</small>
+                <p id="logo-error" class="field-error" hidden></p>
+              </div>
+              <img id="logo-preview" class="logo-preview org-logo-preview" alt="معاينة شعار المنشأة" hidden />
+              <p class="auth-form-note">ستكون مدير منشأتك، ويمكنك دعوة أعضاء فريقك بعد إنشائها.</p>
+              <button class="btn btn-block auth-submit" type="submit">إنشاء المنشأة</button>
+            </form>
+          </div>
+          <div class="auth-card-footer"><p>تريد إكمال الإعداد لاحقًا؟ <button class="auth-text-button" type="button" data-logout>تسجيل الخروج</button></p></div>
+        </section>
+      </div>
+    </main>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

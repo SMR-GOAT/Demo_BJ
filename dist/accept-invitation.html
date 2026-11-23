@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | قبول الدعوة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" crossorigin href="/assets/style-CCO9BVZR.css">
+  </head>
+  <body data-page="accept">
+    <main class="auth-wrap">
+      <section class="auth-card" aria-labelledby="accept-title">
+        <a href="./index.html"><img class="logo" src="./e-bajr-logo.png" alt="E-Bajr" width="120" height="40" /></a>
+        <h1 id="accept-title">قبول الدعوة</h1>
+        <p>دعوة للانضمام إلى <strong id="org-name">المنشأة</strong> بدور <strong id="role-name">موظف</strong>.</p>
+        <p id="form-alert" class="alert" role="status" hidden></p>
+        <form id="accept-form" novalidate>
+          <label class="field">
+            <span>الاسم</span>
+            <input name="name" type="text" autocomplete="name" aria-describedby="name-error" required />
+            <p id="name-error" class="field-error" hidden></p>
+          </label>
+          <label class="field">
+            <span>البريد الإلكتروني</span>
+            <input name="email" type="email" autocomplete="email" inputmode="email" aria-describedby="email-error" required />
+            <p id="email-error" class="field-error" hidden></p>
+          </label>
+          <label class="field">
+            <span>كلمة المرور</span>
+            <input name="password" type="password" autocomplete="new-password" aria-describedby="password-error" required />
+            <p id="password-error" class="field-error" hidden></p>
+          </label>
+          <label class="field">
+            <span>تأكيد كلمة المرور</span>
+            <input name="confirm" type="password" autocomplete="new-password" aria-describedby="confirm-error" required />
+            <p id="confirm-error" class="field-error" hidden></p>
+          </label>
+          <button class="btn btn-block" type="submit">قبول الدعوة</button>
+        </form>
+        <div class="form-links">
+          <a href="./login.html">العودة لتسجيل الدخول</a>
+        </div>
+      </section>
+    </main>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
