@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | تسجيل الدخول</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" crossorigin href="/assets/style-CCO9BVZR.css">
+  </head>
+  <body data-page="login" class="auth-screen">
+    <main class="auth-wrap">
+      <div class="auth-shell">
+        <div class="auth-topbar">
+          <a href="./index.html" aria-label="E-Bajr، الرئيسية"><img class="logo" src="./e-bajr-logo.png" alt="E-Bajr" width="120" height="40" /></a>
+          <a class="auth-home" href="./index.html">العودة للرئيسية</a>
+        </div>
+        <section class="auth-card" aria-labelledby="login-title">
+          <header class="auth-heading">
+            <h1 id="login-title">أهلًا بعودتك</h1>
+            <p>سجّل دخولك لمتابعة طلبات منشأتك وإدارة العمل.</p>
+          </header>
+          <div class="auth-content">
+            <p id="form-alert" class="alert" role="status" hidden></p>
+            <form id="login-form" novalidate>
+              <div class="field">
+                <label for="login-identifier">اسم المستخدم أو البريد الإلكتروني</label>
+                <input id="login-identifier" name="identifier" type="text" autocomplete="username" placeholder="اسم المستخدم أو بريدك الإلكتروني" aria-describedby="identifier-error" required />
+                <p id="identifier-error" class="field-error" hidden></p>
+              </div>
+              <div class="field">
+                <label for="login-password">كلمة المرور</label>
+                <div class="password-field">
+                  <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="أدخل كلمة المرور" aria-describedby="password-error" required />
+                  <button class="password-toggle" type="button" data-password-toggle aria-controls="login-password" aria-pressed="false" aria-label="إظهار كلمة المرور">إظهار</button>
+                </div>
+                <p id="password-error" class="field-error" hidden></p>
+              </div>
+              <div class="auth-options"><a href="./forgot-password.html">نسيت كلمة المرور؟</a></div>
+              <button class="btn btn-block auth-submit" type="submit">تسجيل الدخول</button>
+            </form>
+          </div>
+          <div class="auth-card-footer"><p>ليس لديك حساب؟ <a href="./signup.html">إنشاء حساب جديد</a></p></div>
+        </section>
+        <details class="auth-tools">
+          <summary>أدوات التجربة</summary>
+          <div>
+            <p class="hint">بعد إنشاء المنشأة يمكن تجربة دور الموظف بالبريد <bdi>sara@example.com</bdi></p>
+            <button class="btn btn-quiet btn-sm" id="reset-demo" type="button">مسح بيانات التجربة</button>
+          </div>
+        </details>
+      </div>
+    </main>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

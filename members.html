@@ -31,7 +31,7 @@
       <main class="dashboard-main">
         <section id="denied" class="members-denied card" hidden>
           <h1 class="text-2xl font-extrabold mb-3">الأعضاء</h1>
-          <p class="alert alert-error m-0">إدارة الأعضاء متاحة لمدير المنشأة فقط.</p>
+          <p class="alert alert-error m-0">إدارة الأعضاء متاحة للمالك والمدراء فقط.</p>
         </section>
         <section id="admin-panel">
           <header class="mb-7">
@@ -54,7 +54,7 @@
                 <label class="flex flex-col gap-2 mb-5 text-sm font-bold" for="invite-role">
                   الدور
                   <select id="invite-role" class="select select-bordered w-full" name="role">
-                    <option value="staff">موظف</option>
+                    <option value="staff">موظف</option> 
                     <option value="admin">مدير</option>
                   </select>
                 </label>
@@ -74,7 +74,7 @@
                   <tbody id="members-body"></tbody>
                 </table>
               </div>
-              <p class="members-role-note">دور حسابك الحالي يظهر للعرض فقط، ويمكنك تعديل أدوار بقية الأعضاء.</p>
+              <p id="members-permissions" class="members-role-note">المالك يضيف المدراء والموظفين، والمدير يضيف الموظفين فقط.</p>
             </section>
           </div>
         </section>

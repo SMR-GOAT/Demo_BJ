@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | الأعضاء</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="./script.js"></script>
+    <script src="./i18n.js" defer></script>
+    <script>
+      try {
+        var data = JSON.parse(localStorage.getItem("ebajr-demo") || "null");
+        if (!data || !data.session || data.session.role !== "admin" || !data.session.loggedIn) {
+          document.documentElement.classList.add("hide-admin");
+        }
+      } catch (error) {
+        document.documentElement.classList.add("hide-admin");
+      }
+    </script>
+    <link rel="stylesheet" crossorigin href="/assets/members-VJu98TH4.css">
+    <link rel="stylesheet" crossorigin href="/assets/style-CCO9BVZR.css">
+  </head>
+  <body data-page="members" class="app-page">
+    <div class="dashboard-layout">
+      <aside id="app-sidebar" class="dashboard-sidebar" aria-label="مساحة العمل" data-i18n-aria-label="sidebar.workspace"></aside>
+
+      <main class="dashboard-main">
+        <section id="denied" class="members-denied card" hidden>
+          <h1 class="text-2xl font-extrabold mb-3">الأعضاء</h1>
+          <p class="alert alert-error m-0">إدارة الأعضاء متاحة للمالك والمدراء فقط.</p>
+        </section>
+        <section id="admin-panel">
+          <header class="mb-7">
+            <h1 class="text-2xl font-extrabold mb-2">أعضاء المنشأة</h1>
+            <p class="text-sm text-[#746871] m-0">أضف فريقك وحدّد دور كل عضو داخل منشأتك.</p>
+          </header>
+          <p id="form-alert" class="alert" role="status" hidden></p>
+
+          <div class="grid items-start gap-6 xl:grid-cols-[19rem_minmax(0,1fr)]">
+            <section class="card members-invite" aria-labelledby="invite-title">
+              <div class="members-invite-icon" aria-hidden="true">＋</div>
+              <h2 id="invite-title" class="text-lg font-extrabold mb-2">دعوة عضو جديد</h2>
+              <p class="text-sm text-[#746871] mb-5">أدخل بريد العضو واختر دوره في الفريق.</p>
+              <form id="invite-form" novalidate>
+                <label class="flex flex-col gap-2 mb-4 text-sm font-bold" for="invite-email">
+                  البريد الإلكتروني
+                  <input id="invite-email" class="input input-bordered w-full" name="email" type="email" inputmode="email" autocomplete="email" dir="ltr" placeholder="name@example.com" aria-describedby="invite-error" required />
+                </label>
+                <p id="invite-error" class="field-error mb-3" hidden></p>
+                <label class="flex flex-col gap-2 mb-5 text-sm font-bold" for="invite-role">
+                  الدور
+                  <select id="invite-role" class="select select-bordered w-full" name="role">
+                    <option value="staff">موظف</option> 
+                    <option value="admin">مدير</option>
+                  </select>
+                </label>
+                <button class="btn w-full" type="submit">إرسال الدعوة</button>
+                <p class="members-demo-note">دعوة تجريبية لعرض مسار الانضمام.</p>
+                <a id="invite-link" class="members-invite-link" href="./accept-invitation.html" hidden>فتح صفحة قبول الدعوة</a>
+              </form>
+            </section>
+
+            <section class="card members-panel" aria-labelledby="team-title">
+              <header class="px-5 py-5 border-b border-burgundyGray-200/40">
+                <h2 id="team-title" class="text-lg font-extrabold m-0">فريق المنشأة</h2>
+              </header>
+              <div class="table-wrap p-4 pt-0">
+                <table class="table data-table">
+                  <thead><tr><th>الاسم</th><th>البريد الإلكتروني</th><th>الحالة</th><th>الدور والإجراءات</th></tr></thead>
+                  <tbody id="members-body"></tbody>
+                </table>
+              </div>
+              <p id="members-permissions" class="members-role-note">المالك يضيف المدراء والموظفين، والمدير يضيف الموظفين فقط.</p>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <dialog class="members-dialog" id="confirm-dialog">
+      <form method="dialog">
+        <h2>تأكيد</h2>
+        <p data-confirm-text></p>
+        <div class="row-actions">
+          <button class="btn btn-quiet" value="cancel">تراجع</button>
+          <button class="btn" value="ok">تأكيد</button>
+        </div>
+      </form>
+    </dialog>
+    <script src="./components/sidebar.js" defer></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

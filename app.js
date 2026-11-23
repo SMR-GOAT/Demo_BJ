@@ -30,6 +30,12 @@ function load() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return emptyState();
     const data = JSON.parse(raw);
+    // Upgrade existing demo owners and refresh roles from the membership.
+    for (const member of data.members || []) {
+      if (member.owner) member.role = "owner";
+    }
+    const currentMember = (data.members || []).find((member) => member.id === data.session?.memberId);
+    if (currentMember && data.session) data.session.role = currentMember.role;
     return {
       account: data.account || null,
       session: data.session || null,
@@ -58,7 +64,17 @@ function persist(state) {
 }
 
 function roleLabel(role) {
-  return role === "admin" ? "مدير" : "موظف";
+  return { owner: "مالك المنشأة", admin: "مدير", staff: "موظف" }[role] || "موظف";
+}
+
+function managesMembers(state) {
+  return Boolean(state.session?.loggedIn && ["owner", "admin"].includes(state.session.role));
+}
+
+function canManageMember(state, member) {
+  if (!managesMembers(state) || !member || member.owner || member.role === "owner" ||
+      member.disabled || member.id === state.session.memberId) return false;
+  return state.session.role === "owner" || member.role === "staff";
 }
 
 function statusLabel(status) {
@@ -237,8 +253,9 @@ function fillChrome(state) {
     if (href === file) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
   });
+  document.documentElement.classList.toggle("hide-admin", !managesMembers(state));
   document.querySelectorAll(".admin-link").forEach((link) => {
-    link.hidden = !state.session || state.session.role !== "admin";
+    link.hidden = !managesMembers(state);
   });
 }
 
@@ -313,7 +330,7 @@ function initLogin() {
 
     if (current.account) {
       const email = current.account.email.toLowerCase();
-      const username = current.account.username.toLowerCase();
+      const username = (current.account.username || "").toLowerCase();
       if (identifier === email || identifier === username) {
         const owner = current.members.find((member) => member.owner);
         if (owner && owner.disabled) {
@@ -321,9 +338,9 @@ function initLogin() {
           return;
         }
         current.session = {
-          name: current.account.name,
+          name: current.account.username || current.account.name || current.account.email,
           email: current.account.email,
-          role: owner ? owner.role : "admin",
+          role: owner ? owner.role : "owner",
           loggedIn: true,
           memberId: owner ? owner.id : "",
         };
@@ -378,12 +395,10 @@ function initSignup() {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     if (form.dataset.busy === "1") return;
-    const nameInput = field(form, "name");
     const usernameInput = field(form, "username");
     const emailInput = field(form, "email");
     const passwordInput = field(form, "password");
     const confirmInput = field(form, "confirm");
-    const name = nameInput.value.trim();
     const username = usernameInput.value.trim();
     const email = emailInput.value.trim();
     const password = passwordInput.value;
@@ -391,7 +406,6 @@ function initSignup() {
     emailInput.value = email;
 
     const errors = {
-      name: name ? "" : "اكتب الاسم.",
       username: username ? "" : "اكتب اسم المستخدم.",
       email: "",
       password: password ? "" : "اكتب كلمة المرور.",
@@ -416,11 +430,11 @@ function initSignup() {
 
     form.dataset.busy = "1";
     form.querySelector("button[type=submit]").disabled = true;
-    state.account = { name: name, username: username, email: email };
+    state.account = { name: username, username: username, email: email };
     state.session = {
-      name: name,
+      name: username,
       email: email,
-      role: "admin",
+      role: "owner",
       loggedIn: true,
       memberId: "",
     };
@@ -490,7 +504,7 @@ function initEstablishment() {
         id: ownerId,
         name: state.account.name,
         email: state.account.email,
-        role: "admin",
+        role: "owner",
         disabled: false,
         pending: false,
         owner: true,
@@ -506,7 +520,7 @@ function initEstablishment() {
       },
     ];
     state.session.memberId = ownerId;
-    state.session.role = "admin";
+    state.session.role = "owner";
     state.orders = [
       makeOrder("014", "new", 40, state.account.name),
       makeOrder("052", "preparing", 15, state.account.name),
@@ -526,7 +540,8 @@ function initAccept() {
   const params = new URLSearchParams(location.search);
   const state = load();
   const org = params.get("org") || (state.establishment ? state.establishment.name : "المنشأة");
-  const role = params.get("role") === "admin" ? "admin" : "staff";
+  const invitedMember = state.members.find((member) => member.pending && member.email.toLowerCase() === (params.get("email") || "").toLowerCase());
+  const role = invitedMember ? invitedMember.role : "staff";
   const email = (params.get("email") || "").trim();
   document.querySelector("#org-name").textContent = org;
   document.querySelector("#role-name").textContent = roleLabel(role);
@@ -585,7 +600,6 @@ function initAccept() {
       current.members.push(member);
     } else {
       member.name = name;
-      member.role = role;
       member.pending = false;
       member.disabled = false;
     }
@@ -669,7 +683,7 @@ function initDashboard() {
       body.append(row);
     }
     const hint = document.querySelector("#staff-hint");
-    if (hint) hint.hidden = !state.session || state.session.role !== "admin";
+    if (hint) hint.hidden = !managesMembers(state);
   }
 
   window.addEventListener("storage", paint);
@@ -986,26 +1000,31 @@ function initMembers() {
   function paint() {
     const state = load();
     const body = document.querySelector("#members-body");
+    form.role.querySelector('[value="admin"]').disabled = state.session.role !== "owner";
+    if (state.session.role !== "owner") form.role.value = "staff";
+    document.querySelector("#members-permissions").textContent = state.session.role === "owner"
+      ? "أنت مالك المنشأة. يمكنك دعوة المدراء والموظفين وإدارة أدوارهم. حساب المالك محمي من التعديل والإزالة."
+      : "يمكنك دعوة الموظفين وإدارة عضويتهم فقط. إضافة المدراء وتغيير الأدوار متاح لمالك المنشأة.";
     body.replaceChildren();
     for (const member of state.members) {
       const row = document.createElement("tr");
       const select = document.createElement("select");
       select.className = "table-select";
-      for (const role of ["staff", "admin"]) {
+      for (const role of (member.owner || member.role === "owner" ? ["owner"] : ["staff", "admin"])) {
         const option = document.createElement("option");
         option.value = role;
         option.textContent = roleLabel(role);
         option.selected = member.role === role;
         select.append(option);
       }
-      const mine = state.session && member.id === state.session.memberId;
-      select.disabled = mine || member.disabled;
+      select.disabled = !canManageMember(state, member) || state.session.role !== "owner";
+      select.setAttribute("aria-label", "دور " + (member.name || member.email));
       select.addEventListener("change", () => changeRole(member.id, select.value));
 
       const actions = document.createElement("div");
       actions.className = "actions";
       actions.append(select);
-      if (!mine && !member.disabled) {
+      if (canManageMember(state, member)) {
         const remove = document.createElement("button");
         remove.type = "button";
         remove.className = "btn btn-danger btn-sm";
@@ -1040,8 +1059,8 @@ function initMembers() {
   function changeRole(id, role) {
     const state = load();
     const member = state.members.find((item) => item.id === id);
-    if (!member || member.id === state.session.memberId) {
-      showAlert(alert, "لا يمكن تغيير دورك من هنا.", "error");
+    if (!canManageMember(state, member) || state.session.role !== "owner") {
+      showAlert(alert, "تغيير الأدوار متاح للمالك فقط، ولا يمكن تعديل حساب المالك.", "error");
       paint();
       return;
     }
@@ -1055,7 +1074,7 @@ function initMembers() {
   async function removeMember(id) {
     const state = load();
     const member = state.members.find((item) => item.id === id);
-    if (!member || member.id === state.session.memberId) return;
+    if (!canManageMember(state, member)) return;
     const text = member.pending
       ? "هل تريد إلغاء هذه الدعوة؟"
       : "سيتم إيقاف وصول هذا المستخدم، مع بقاء سجل إجراءاته.";
@@ -1063,7 +1082,7 @@ function initMembers() {
     if (!ok) return;
     const fresh = load();
     const target = fresh.members.find((item) => item.id === id);
-    if (!target) {
+    if (!canManageMember(fresh, target)) {
       paint();
       return;
     }
@@ -1087,6 +1106,10 @@ function initMembers() {
     if (error) return;
 
     const state = load();
+    if (!managesMembers(state) || (role === "admin" && state.session.role !== "owner")) {
+      showAlert(alert, "إضافة المدراء متاحة لمالك المنشأة فقط.", "error");
+      return;
+    }
     const exists = state.members.some((member) => member.email.toLowerCase() === email.toLowerCase());
     if (exists || (state.account && state.account.email.toLowerCase() === email.toLowerCase())) {
       setFieldError("invite-error", "هذا البريد مضاف مسبقًا.");
@@ -1257,6 +1280,62 @@ function initCustomer() {
   window.setInterval(paint, 1000);
 }
 
+function initOrderDisplay() {
+  let signature = "";
+  let previousReady = new Set();
+  function paint() {
+    const state = load();
+    document.querySelector("#display-clock").textContent = new Intl.DateTimeFormat("ar-SA", {
+      hour: "2-digit", minute: "2-digit", numberingSystem: "latn",
+    }).format(new Date());
+    const current = JSON.stringify(state.orders);
+    if (current === signature) return;
+    signature = current;
+    const ready = state.orders.filter((order) => order.status === "ready")
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    const preparing = state.orders.filter((order) => ["new", "preparing"].includes(order.status));
+    for (const [key, orders] of [["ready", ready], ["preparing", preparing]]) {
+      const list = document.querySelector("#display-" + key);
+      list.replaceChildren();
+      for (const order of orders) {
+        const number = document.createElement("div");
+        number.className = "display-number";
+        number.setAttribute("role", "listitem");
+        number.dir = "ltr";
+        number.textContent = order.number;
+        if (key === "ready" && !previousReady.has(order.id)) number.classList.add("is-new");
+        list.append(number);
+      }
+      document.querySelector("#" + key + "-count").textContent = orders.length;
+      document.querySelector("#" + key + "-empty").hidden = orders.length > 0;
+    }
+    const arrivals = ready.filter((order) => !previousReady.has(order.id));
+    if (arrivals.length) {
+      document.querySelector("#display-announcement").textContent = "جاهز للاستلام: " + arrivals.map((order) => order.number).join("، ");
+    }
+    previousReady = new Set(ready.map((order) => order.id));
+  }
+  const fullscreen = document.querySelector("#display-fullscreen");
+  fullscreen.hidden = !document.fullscreenEnabled;
+  fullscreen.addEventListener("click", async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await document.documentElement.requestFullscreen();
+    } catch {
+      const error = document.querySelector("#display-error");
+      error.textContent = "تعذر فتح ملء الشاشة. يمكنك تكبير نافذة المتصفح.";
+      error.hidden = false;
+    }
+  });
+  document.addEventListener("fullscreenchange", () => {
+    fullscreen.textContent = document.fullscreenElement ? "إنهاء ملء الشاشة" : "ملء الشاشة";
+    fullscreen.setAttribute("aria-pressed", String(Boolean(document.fullscreenElement)));
+  });
+  window.addEventListener("storage", paint);
+  window.setInterval(paint, 1000);
+  paint();
+}
+
 function boot() {
   // Build shared elements before binding their buttons and filling account data.
   if (document.getElementById("app-sidebar")) {
@@ -1276,7 +1355,7 @@ function boot() {
     });
   }
   const page = document.body.dataset.page || "";
-  const appPages = ["dashboard", "orders", "create-order", "members"];
+  const appPages = ["dashboard", "orders", "create-order", "members", "display"];
   if (appPages.includes(page)) {
     const state = requireSession();
     if (!state) return;
@@ -1286,7 +1365,7 @@ function boot() {
     }
     fillChrome(state);
     watchSession();
-    if (page === "members" && state.session.role !== "admin") {
+    if (page === "members" && !managesMembers(state)) {
       document.querySelector("#denied").hidden = false;
       document.querySelector("#admin-panel").hidden = true;
       return;
@@ -1313,6 +1392,7 @@ function boot() {
     orders: initOrders,
     members: initMembers,
     customer: initCustomer,
+    display: initOrderDisplay,
   };
   if (starters[page]) starters[page]();
 }
