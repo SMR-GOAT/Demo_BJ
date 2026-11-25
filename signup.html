@@ -26,6 +26,11 @@
             <form id="signup-form" novalidate>
               <div class="auth-fields">
                 <div class="field">
+                  <label for="signup-name">الاسم</label>
+                  <input id="signup-name" name="name" type="text" autocomplete="name" placeholder="اسمك الكامل" aria-describedby="name-error" required />
+                  <p id="name-error" class="field-error" hidden></p>
+                </div>
+                <div class="field">
                   <label for="signup-username">اسم المستخدم</label>
                   <input id="signup-username" name="username" type="text" autocomplete="username" placeholder="اختر اسم مستخدم" aria-describedby="username-error" required />
                   <p id="username-error" class="field-error" hidden></p>
