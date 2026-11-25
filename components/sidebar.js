@@ -23,7 +23,8 @@ function renderSidebar() {
       <a href="./dashboard.html" data-keep-language><span class="dashboard-nav-icon" aria-hidden="true">▦</span><span data-i18n="sidebar.dashboard">لوحة المتابعة</span></a>
       <a href="./orders.html" data-keep-language><span class="dashboard-nav-icon" aria-hidden="true">≡</span><span data-i18n="sidebar.orders">الطلبات</span></a>
       <a href="./create-order.html" data-keep-language><span class="dashboard-nav-icon" aria-hidden="true">＋</span><span data-i18n="sidebar.newOrder">طلب جديد</span></a>
-      <a href="./order-display.html" data-keep-language><span class="dashboard-nav-icon" aria-hidden="true">▤</span><span data-i18n="sidebar.display">شاشة الطلبات</span></a>
+      <a href="./order-display.html" target="_blank" data-keep-language><span class="dashboard-nav-icon" aria-hidden="true">▤</span><span data-i18n="sidebar.display">شاشة الطلبات</span></a>
+      <a href="./notifications.html" data-keep-language><span class="dashboard-nav-icon" aria-hidden="true">♧</span><span data-i18n="sidebar.notifications">سجل التنبيهات</span></a>
       <a class="admin-link" href="./members.html" data-keep-language hidden><span class="dashboard-nav-icon dashboard-person" aria-hidden="true"></span><span data-i18n="sidebar.members">الأعضاء</span></a>
     </nav>
 

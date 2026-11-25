@@ -196,21 +196,13 @@ function logoError(error) {
   return "تعذر قراءة الشعار. حاول مرة أخرى.";
 }
 
-function notifyReady(state, order) {
-  if (!order.notify) return;
-  const attempt = { id: uid(), at: new Date().toISOString(), ok: false, reason: "" };
-  try {
-    if (typeof Notification === "undefined" || Notification.permission !== "granted") {
-      attempt.reason = "الإذن غير متاح";
-    } else {
-      const org = state.establishment ? state.establishment.name : "المنشأة";
-      new Notification(org, { body: "الطلب " + order.number + " جاهز للاستلام" });
-      attempt.ok = true;
-    }
-  } catch (error) {
-    attempt.reason = "تعذر الإرسال";
-  }
-  order.attempts.push(attempt);
+function recordStatusNotification(order, from) {
+  // Prototype only: record a simulated send with the same saved status change.
+  if (!Array.isArray(order.attempts)) order.attempts = [];
+  order.attempts.push({
+    id: uid(), at: order.updatedAt, ok: true, reason: "",
+    from, to: order.status, simulated: true,
+  });
 }
 
 function ask(dialog, text) {
@@ -338,7 +330,7 @@ function initLogin() {
           return;
         }
         current.session = {
-          name: current.account.username || current.account.name || current.account.email,
+          name: current.account.name || current.account.username || current.account.email,
           email: current.account.email,
           role: owner ? owner.role : "owner",
           loggedIn: true,
@@ -395,10 +387,12 @@ function initSignup() {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     if (form.dataset.busy === "1") return;
+    const nameInput = field(form, "name");
     const usernameInput = field(form, "username");
     const emailInput = field(form, "email");
     const passwordInput = field(form, "password");
     const confirmInput = field(form, "confirm");
+    const name = nameInput.value.trim();
     const username = usernameInput.value.trim();
     const email = emailInput.value.trim();
     const password = passwordInput.value;
@@ -406,6 +400,7 @@ function initSignup() {
     emailInput.value = email;
 
     const errors = {
+      name: name ? "" : "اكتب الاسم.",
       username: username ? "" : "اكتب اسم المستخدم.",
       email: "",
       password: password ? "" : "اكتب كلمة المرور.",
@@ -430,9 +425,9 @@ function initSignup() {
 
     form.dataset.busy = "1";
     form.querySelector("button[type=submit]").disabled = true;
-    state.account = { name: username, username: username, email: email };
+    state.account = { name: name, username: username, email: email };
     state.session = {
-      name: username,
+      name: name,
       email: email,
       role: "owner",
       loggedIn: true,
@@ -877,7 +872,7 @@ function initOrders() {
     order.status = next;
     order.updatedAt = at;
     order.history.push({ from: from, to: next, at: at, by: state.session.name });
-    if (next === "ready") notifyReady(state, order);
+    recordStatusNotification(order, from);
     const problem = persist(state);
     if (problem) {
       showAlert(alert, problem, "error");
@@ -943,6 +938,7 @@ function initOrders() {
     order.status = "cancelled";
     order.updatedAt = at;
     order.history.push({ from: from, to: "cancelled", at: at, by: state.session.name });
+    recordStatusNotification(order, from);
     const problem = persist(state);
     if (problem) {
       showAlert(alert, problem, "error");
@@ -1280,14 +1276,54 @@ function initCustomer() {
   window.setInterval(paint, 1000);
 }
 
+function initNotificationLog() {
+  const search = document.querySelector("#log-search");
+  const filter = document.querySelector("#log-filter");
+  function paint() {
+    const attempts = load().orders.flatMap((order) => (order.attempts || []).map((attempt) => ({
+      ...attempt, number: order.number,
+    }))).sort((a, b) => new Date(b.at) - new Date(a.at));
+    document.querySelector("#log-total").textContent = attempts.length;
+    document.querySelector("#log-success").textContent = attempts.filter((attempt) => attempt.ok).length;
+    document.querySelector("#log-failed").textContent = attempts.filter((attempt) => !attempt.ok).length;
+    const rows = attempts.filter((attempt) => String(attempt.number).includes(search.value.trim()) && (
+      filter.value === "all" || (filter.value === "success" ? attempt.ok : !attempt.ok)
+    ));
+    const body = document.querySelector("#log-body");
+    body.replaceChildren();
+    for (const attempt of rows) {
+      const row = document.createElement("tr");
+      const result = document.createElement("span");
+      result.className = "badge " + (attempt.ok ? "badge-success" : "badge-error");
+      result.textContent = attempt.simulated ? "ناجح تجريبيًا" : (attempt.ok ? "ناجح" : "فاشل");
+      row.append(
+        cell("الطلب", numberNode(attempt.number)),
+        cell("وقت المحاولة", textNode(formatTime(attempt.at))),
+        cell("الحالة الجديدة", textNode(attempt.to ? statusLabel(attempt.to) : "—")),
+        cell("النتيجة", result),
+        cell("سبب الفشل", textNode(attempt.ok ? "—" : (attempt.reason || "سبب غير مسجّل")))
+      );
+      body.append(row);
+    }
+    document.querySelector("#log-table").hidden = rows.length === 0;
+    document.querySelector("#log-empty").hidden = rows.length !== 0;
+    document.querySelector("#log-empty-title").textContent = attempts.length ? "لا توجد نتائج مطابقة" : "لا توجد محاولات إرسال بعد";
+    document.querySelector("#log-empty-text").textContent = attempts.length
+      ? "جرّب رقم طلب آخر أو غيّر فلتر النتيجة."
+      : "غيّر حالة طلب من صفحة الطلبات لتظهر محاولة إرسال تجريبية هنا.";
+    document.querySelector("#log-results").textContent = rows.length + " من " + attempts.length + " محاولة";
+  }
+  search.addEventListener("input", paint);
+  filter.addEventListener("change", paint);
+  window.addEventListener("storage", paint);
+  paint();
+}
+
 function initOrderDisplay() {
   let signature = "";
   let previousReady = new Set();
   function paint() {
     const state = load();
-    document.querySelector("#display-clock").textContent = new Intl.DateTimeFormat("ar-SA", {
-      hour: "2-digit", minute: "2-digit", numberingSystem: "latn",
-    }).format(new Date());
     const current = JSON.stringify(state.orders);
     if (current === signature) return;
     signature = current;
@@ -1302,7 +1338,12 @@ function initOrderDisplay() {
         number.className = "display-number";
         number.setAttribute("role", "listitem");
         number.dir = "ltr";
-        number.textContent = order.number;
+        const value = document.createElement("bdi");
+        value.textContent = order.number;
+        const label = document.createElement("span");
+        label.className = "display-number-label";
+        label.textContent = key === "ready" ? "جاهز للاستلام" : "رقم الطلب";
+        number.append(value, label);
         if (key === "ready" && !previousReady.has(order.id)) number.classList.add("is-new");
         list.append(number);
       }
@@ -1315,22 +1356,6 @@ function initOrderDisplay() {
     }
     previousReady = new Set(ready.map((order) => order.id));
   }
-  const fullscreen = document.querySelector("#display-fullscreen");
-  fullscreen.hidden = !document.fullscreenEnabled;
-  fullscreen.addEventListener("click", async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await document.documentElement.requestFullscreen();
-    } catch {
-      const error = document.querySelector("#display-error");
-      error.textContent = "تعذر فتح ملء الشاشة. يمكنك تكبير نافذة المتصفح.";
-      error.hidden = false;
-    }
-  });
-  document.addEventListener("fullscreenchange", () => {
-    fullscreen.textContent = document.fullscreenElement ? "إنهاء ملء الشاشة" : "ملء الشاشة";
-    fullscreen.setAttribute("aria-pressed", String(Boolean(document.fullscreenElement)));
-  });
   window.addEventListener("storage", paint);
   window.setInterval(paint, 1000);
   paint();
@@ -1355,7 +1380,7 @@ function boot() {
     });
   }
   const page = document.body.dataset.page || "";
-  const appPages = ["dashboard", "orders", "create-order", "members", "display"];
+  const appPages = ["dashboard", "orders", "create-order", "members", "display", "notifications"];
   if (appPages.includes(page)) {
     const state = requireSession();
     if (!state) return;
@@ -1393,6 +1418,7 @@ function boot() {
     members: initMembers,
     customer: initCustomer,
     display: initOrderDisplay,
+    notifications: initNotificationLog,
   };
   if (starters[page]) starters[page]();
 }
