@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Bajr | سجل التنبيهات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css" />
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="./script.js"></script>
+    <script src="./i18n.js" defer></script>
+    <link rel="stylesheet" crossorigin href="/assets/notifications-CdGx8ISJ.css">
+    <link rel="stylesheet" crossorigin href="/assets/style-CCO9BVZR.css">
+  </head>
+  <body data-page="notifications" class="app-page">
+    <div class="dashboard-layout">
+      <aside id="app-sidebar" class="dashboard-sidebar" aria-label="مساحة العمل" data-i18n-aria-label="sidebar.workspace"></aside>
+      <main class="dashboard-main">
+        <header class="mb-7">
+          <p class="log-eyebrow">متابعة التواصل</p>
+          <h1 class="text-2xl font-extrabold mb-2">سجل التنبيهات</h1>
+          <p class="log-description">راجع محاولات تنبيه العملاء عند تغيير حالة الطلب ونتيجة كل محاولة.</p>
+        </header>
+        <div class="log-summary stats" aria-label="ملخص محاولات الإرسال">
+          <div class="stat"><div class="stat-title">إجمالي المحاولات</div><div id="log-total" class="stat-value">0</div></div>
+          <div class="stat"><div class="stat-title">نجاح الإرسال</div><div id="log-success" class="stat-value log-success">0</div></div>
+          <div class="stat"><div class="stat-title">تعذر الإرسال</div><div id="log-failed" class="stat-value log-failed">0</div></div>
+        </div>
+        <section class="card log-panel" aria-labelledby="log-heading">
+          <div class="log-toolbar">
+            <h2 id="log-heading">محاولات الإرسال</h2>
+            <div class="log-filters">
+              <label>رقم الطلب<input id="log-search" type="search" class="input input-bordered" placeholder="ابحث برقم الطلب" /></label>
+              <label>النتيجة<select id="log-filter" class="select select-bordered"><option value="all">كل النتائج</option><option value="success">ناجح</option><option value="failed">فاشل</option></select></label>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table data-table" id="log-table">
+              <thead><tr><th>الطلب</th><th>وقت المحاولة</th><th>الحالة الجديدة</th><th>النتيجة</th><th>سبب الفشل</th></tr></thead>
+              <tbody id="log-body"></tbody>
+            </table>
+            <div id="log-empty" class="log-empty" role="status" hidden><span aria-hidden="true">—</span><h3 id="log-empty-title">لا توجد محاولات إرسال بعد</h3><p id="log-empty-text">غيّر حالة طلب من صفحة الطلبات لتظهر محاولة إرسال تجريبية هنا.</p></div>
+          </div>
+          <footer class="log-note"><span id="log-results" role="status"></span><span>كل تغيير للحالة يسجّل إرسالًا تجريبيًا فقط، دون إرسال تنبيه فعلي للعميل.</span></footer>
+        </section>
+      </main>
+    </div>
+    <script src="./components/sidebar.js" defer></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

@@ -48,6 +48,18 @@ if (window.tailwind) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const topics = document.querySelectorAll(".comparison-topic");
+  for (const topic of topics) {
+    topic.addEventListener("click", () => {
+      const wasSelected = topic.getAttribute("aria-pressed") === "true";
+      for (const other of topics) {
+        const selected = other === topic && !wasSelected;
+        other.setAttribute("aria-pressed", String(selected));
+        other.closest("tr").classList.toggle("is-selected", selected);
+      }
+    });
+  }
+
   const nodes = document.querySelectorAll(".reveal, .notification-bell");
   if (nodes.length === 0) return;
 
