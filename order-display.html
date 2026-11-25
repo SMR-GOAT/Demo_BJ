@@ -14,19 +14,7 @@
     <link rel="stylesheet" href="./styles/order-display.css" />
   </head>
   <body data-page="display" class="order-display-page">
-    <header class="display-header">
-      <div class="flex items-center gap-5">
-        <img class="logo" src="./e-bajr-logo.png" alt="E-Bajr" width="120" height="40" />
-        <div><p class="display-eyebrow">أهلًا بك في</p><h1 data-org>منشأتك</h1></div>
-      </div>
-      <div class="display-tools">
-        <time id="display-clock" aria-label="الوقت الحالي"></time>
-        <button id="display-fullscreen" class="btn btn-quiet btn-sm" type="button" aria-pressed="false">ملء الشاشة</button>
-        <a class="display-back" href="./orders.html">إدارة الطلبات</a>
-      </div>
-    </header>
     <main class="display-main">
-      <div class="display-intro"><p class="display-eyebrow">خذ راحتك، وتابع رقمك هنا</p><h2>طلبك في طريقه إليك.</h2><p>عندما يظهر رقمك في قسم الجاهز، تفضّل لاستلام طلبك.</p></div>
       <div class="display-columns">
         <section class="display-section display-ready" aria-labelledby="ready-heading">
           <header><div><span class="display-state-icon" aria-hidden="true">✓</span><h2 id="ready-heading">جاهز للاستلام</h2></div><span id="ready-count" class="badge">0</span></header>
@@ -44,7 +32,6 @@
       <p id="display-announcement" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
       <p id="display-error" role="status" hidden></p>
     </main>
-    <footer class="display-footer"><span>كل طلب، له وقته. شكرًا لانتظارك.</span><span class="display-demo">معاينة تجريبية · تحديث محلي في نفس المتصفح</span><span>Powered by <bdi>E-Bajr</bdi></span></footer>
     <script src="./app.js" defer></script>
   </body>
 </html>
